@@ -488,7 +488,55 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerMane.style.display = 'none';
     }
 
+    const tuftVal = elements.tuftSelect.value;
     const earVal = elements.earsNum.value;
+
+    if (tuftVal !== '–' && tuftVal !== 'custom') {
+      let currentTuftFile = tuftVal;
+      const earNumMatch = earVal.match(/\d+/);
+      const earIndex = earNumMatch ? earNumMatch[0] : null;
+
+      if (earIndex === '1') {
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-1.png';
+      } else if (earIndex === '2') {
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-2.png';
+      } else if (earIndex === '3') {
+        if (tuftVal === 'tuft2.png') currentTuftFile = 'tuft2-3.png';
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-3.png';
+      } else if (earIndex === '4') {
+        if (tuftVal === 'tuft1.png') currentTuftFile = 'tuft1-4.png';
+        if (tuftVal === 'tuft2.png') currentTuftFile = 'tuft2-4.png';
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-4.png';
+        if (tuftVal === 'tuft4.png') currentTuftFile = 'tuft4-4.png';
+        if (tuftVal === 'tuft5.png') currentTuftFile = 'tuft5-4.png';
+      } else if (earIndex === '6') {
+        if (tuftVal === 'tuft1.png') currentTuftFile = 'tuft1-6.png';
+        if (tuftVal === 'tuft2.png') currentTuftFile = 'tuft2-6.png';
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-6.png';
+        if (tuftVal === 'tuft4.png') currentTuftFile = 'tuft4-6.png';
+        if (tuftVal === 'tuft5.png') currentTuftFile = 'tuft5-6.png';
+      } else if (earIndex === '7') {
+        if (tuftVal === 'tuft1.png') currentTuftFile = 'tuft1-7.png';
+        if (tuftVal === 'tuft2.png') currentTuftFile = 'tuft2-7.png';
+        if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-7.png';
+        if (tuftVal === 'tuft4.png') currentTuftFile = 'tuft4-7.png';
+        if (tuftVal === 'tuft5.png') currentTuftFile = 'tuft5-7.png';
+      }
+
+      elements.layerTuft.src = `images/${currentTuftFile}`;
+      elements.layerTuft.style.display = 'block';
+    } else {
+      elements.layerTuft.style.display = 'none';
+    }
+
+    const bangsVal = elements.bangsSelect.value;
+    if (bangsVal !== '–') {
+      elements.layerFringe.src = `images/${bangsVal}`;
+      elements.layerFringe.style.display = 'block';
+    } else {
+      elements.layerFringe.style.display = 'none';
+    }
+
     let earIndex = '1';
     if (earVal !== '–' && earVal !== 'custom') {
       elements.layerEars.src = `images/${earVal}`;
@@ -514,22 +562,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerEars.style.display = 'none';
       elements.layerEarfur.style.display = 'none';
       elements.layerEartufts.style.display = 'none';
-    }
-
-    const tuftVal = elements.tuftSelect.value;
-    if (tuftVal !== '–' && tuftVal !== 'custom') {
-      elements.layerTuft.src = `images/${tuftVal}`;
-      elements.layerTuft.style.display = 'block';
-    } else {
-      elements.layerTuft.style.display = 'none';
-    }
-
-    const bangsVal = elements.bangsSelect.value;
-    if (bangsVal !== '–') {
-      elements.layerFringe.src = `images/${bangsVal}`;
-      elements.layerFringe.style.display = 'block';
-    } else {
-      elements.layerFringe.style.display = 'none';
     }
 
     if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') {
