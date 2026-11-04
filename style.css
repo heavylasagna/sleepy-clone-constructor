@@ -48,7 +48,7 @@ body {
   font-size: 1rem;
 }
 
-/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: ШИРОКОЕ ПРЕВЬЮ СЛЕВА И ОЧЕНЬ УЗКАЯ ФОРМА СПРАВА */
+/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: ФИКСИРОВАННОЕ ПРЕВЬЮ 760px СЛЕВА И УЗКАЯ ФОРМА СПРАВА */
 .constructor-workspace {
   display: grid;
   grid-template-columns: 1fr;
@@ -57,7 +57,6 @@ body {
 
 @media (min-width: 900px) {
   .constructor-workspace {
-    /* Левая колонка под фиксированное превью 760px, правая заполняет оставшееся место */
     grid-template-columns: 780px minmax(0, 1fr);
     align-items: start;
   }
