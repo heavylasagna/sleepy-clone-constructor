@@ -1,9 +1,9 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Находим все необходимые элементы DOM
   const elements = {
     eyelashes: document.querySelectorAll('input[name="eyelashes"]'),
     
     blushSelect: document.getElementById('blush-select'),
+    blushColorWrap: document.getElementById('blush-color-wrap'),
     blushColor: document.getElementById('blush-color'),
     blushCustom: document.getElementById('blush-custom-text'),
     
@@ -29,20 +29,17 @@ document.addEventListener('DOMContentLoaded', () => {
     tailCustom: document.getElementById('tail-custom-text'),
 
     whiskersSelect: document.getElementById('whiskers-select'),
+    whiskersColorWrap: document.getElementById('whiskers-color-wrap'),
     whiskersColor: document.getElementById('whiskers-color'),
     whiskersCustom: document.getElementById('whiskers-custom-text'),
 
     clothesSelect: document.getElementById('clothes-select'),
     clothesCustom: document.getElementById('clothes-custom-text'),
-    clothesFileWrap: document.getElementById('clothes-file-wrap'),
-    clothesFile: document.getElementById('clothes-file'),
-    clothesPreview: document.getElementById('clothes-preview'),
+    clothesLinkInput: document.getElementById('clothes-link-input'),
 
     toySelect: document.getElementById('toy-select'),
     toyCustom: document.getElementById('toy-custom-text'),
-    toyFileWrap: document.getElementById('toy-file-wrap'),
-    toyFile: document.getElementById('toy-file'),
-    toyPreview: document.getElementById('toy-preview'),
+    toyLinkInput: document.getElementById('toy-link-input'),
 
     linkColor: document.getElementById('link-color'),
     linkRef: document.getElementById('link-ref'),
@@ -51,10 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
     addonsText: document.getElementById('addons-text'),
 
     outlineSelect: document.getElementById('outline-select'),
-    outlineColor: document.getElementById('outline-color'),
+    outlineColorWrap: document.getElementById('outline-color-wrap'),
+    outlineColorPicker: document.getElementById('outline-color-picker'),
 
     bgSelect: document.getElementById('bg-select'),
-    bgCustomColor: document.getElementById('bg-custom-color'),
+    bgColorPickerWrap: document.getElementById('bg-color-picker-wrap'),
+    bgColorPicker: document.getElementById('bg-color-picker'),
+    bgCustomText: document.getElementById('bg-custom-text'),
 
     timeSelect: document.getElementById('time-select'),
     paySelect: document.getElementById('pay-select'),
@@ -65,80 +65,78 @@ document.addEventListener('DOMContentLoaded', () => {
 
     output: document.getElementById('bbcode-output'),
     btnCopy: document.getElementById('btn-copy'),
-    toast: document.getElementById('toast'),
-
-    charFile: document.getElementById('char-file'),
-    charPreviewGrid: document.getElementById('char-preview-grid')
+    toast: document.getElementById('toast')
   };
 
-  // Показ/Скрытие "Свой вариант" и доп. полей
-  function toggleCustom(selectEl, customEl, wrapEl = null) {
-    const isCustom = selectEl.value === 'custom';
-    if (customEl) customEl.classList.toggle('hidden', !isCustom);
-    if (wrapEl) wrapEl.classList.toggle('hidden', !isCustom);
+  // Переключение видимости полей "Свой вариант" и параметров цвета
+  function updateVisibility() {
+    // Румянец
+    const isBlushCustom = elements.blushSelect.value === 'custom';
+    const isBlushActive = elements.blushSelect.value !== '–' && !isBlushCustom;
+    elements.blushCustom.classList.toggle('hidden', !isBlushCustom);
+    elements.blushColorWrap.classList.toggle('hidden', !isBlushActive);
+
+    // Уши
+    elements.earsCustom.classList.toggle('hidden', elements.earsNum.value !== 'custom');
+
+    // Простые текстовые с инпутом "Свой вариант"
+    elements.cheeksCustom.classList.toggle('hidden', elements.cheeksSelect.value !== 'custom');
+    elements.tuftCustom.classList.toggle('hidden', elements.tuftSelect.value !== 'custom');
+    elements.maneCustom.classList.toggle('hidden', elements.maneSelect.value !== 'custom');
+    elements.furCustom.classList.toggle('hidden', elements.furSelect.value !== 'custom');
+    elements.tailCustom.classList.toggle('hidden', elements.tailSelect.value !== 'custom');
+
+    // Усы
+    const isWhiskersCustom = elements.whiskersSelect.value === 'custom';
+    const isWhiskersActive = elements.whiskersSelect.value !== '–' && !isWhiskersCustom;
+    elements.whiskersCustom.classList.toggle('hidden', !isWhiskersCustom);
+    elements.whiskersColorWrap.classList.toggle('hidden', !isWhiskersActive);
+
+    // Одежда и Игрушка
+    const isClothesSelected = elements.clothesSelect.value !== '–';
+    elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
+    elements.clothesLinkInput.classList.toggle('hidden', !isClothesSelected);
+
+    const isToySelected = elements.toySelect.value !== '–';
+    elements.toyCustom.classList.toggle('hidden', !isToySelected);
+    elements.toyLinkInput.classList.toggle('hidden', !isToySelected);
+
+    // Обводка
+    elements.outlineColorWrap.classList.toggle('hidden', elements.outlineSelect.value !== 'custom');
+
+    // Фон
+    const bgVal = elements.bgSelect.value;
+    elements.bgColorPickerWrap.classList.toggle('hidden', bgVal !== 'Однотонный');
+    elements.bgCustomText.classList.toggle('hidden', bgVal !== 'Другие цвета' && bgVal !== 'Другие элементы на фоне');
   }
 
-  // Привязываем события скрытия/показа
-  elements.blushSelect.addEventListener('change', () => toggleCustom(elements.blushSelect, elements.blushCustom));
-  elements.earsNum.addEventListener('change', () => toggleCustom(elements.earsNum, elements.earsCustom));
-  elements.cheeksSelect.addEventListener('change', () => toggleCustom(elements.cheeksSelect, elements.cheeksCustom));
-  elements.tuftSelect.addEventListener('change', () => toggleCustom(elements.tuftSelect, elements.tuftCustom));
-  elements.maneSelect.addEventListener('change', () => toggleCustom(elements.maneSelect, elements.maneCustom));
-  elements.furSelect.addEventListener('change', () => toggleCustom(elements.furSelect, elements.furCustom));
-  elements.tailSelect.addEventListener('change', () => toggleCustom(elements.tailSelect, elements.tailCustom));
-  elements.whiskersSelect.addEventListener('change', () => toggleCustom(elements.whiskersSelect, elements.whiskersCustom));
-  
-  elements.clothesSelect.addEventListener('change', () => toggleCustom(elements.clothesSelect, elements.clothesCustom, elements.clothesFileWrap));
-  elements.toySelect.addEventListener('change', () => toggleCustom(elements.toySelect, elements.toyCustom, elements.toyFileWrap));
-  
-  elements.outlineSelect.addEventListener('change', () => toggleCustom(elements.outlineSelect, elements.outlineColor));
-  elements.bgSelect.addEventListener('change', () => {
-    const isOneColor = elements.bgSelect.value === 'Однотонный';
-    elements.bgCustomColor.classList.toggle('hidden', !isOneColor);
-  });
-
-  // Загрузка предпросмотров файлов
-  function setupFilePreview(inputEl, containerEl) {
-    inputEl.addEventListener('change', (e) => {
-      containerEl.innerHTML = '';
-      Array.from(e.target.files).forEach(file => {
-        const reader = new FileReader();
-        reader.onload = (ev) => {
-          const img = document.createElement('img');
-          img.src = ev.target.result;
-          containerEl.appendChild(img);
-        };
-        reader.readAsDataURL(file);
-      });
+  // Привязка слушателей для обновления видимости и рендеринга кода
+  document.querySelectorAll('input, select, textarea').forEach(item => {
+    item.addEventListener('input', () => {
+      updateVisibility();
       generateBBCode();
     });
-  }
-
-  setupFilePreview(elements.clothesFile, elements.clothesPreview);
-  setupFilePreview(elements.toyFile, elements.toyPreview);
-  setupFilePreview(elements.charFile, elements.charPreviewGrid);
-
-  // Слушатели событий для мгновенного обновления кода
-  document.querySelectorAll('input, select, textarea').forEach(item => {
-    item.addEventListener('input', generateBBCode);
-    item.addEventListener('change', generateBBCode);
+    item.addEventListener('change', () => {
+      updateVisibility();
+      generateBBCode();
+    });
   });
 
   // Главная функция сборки BB-Кода
   function generateBBCode() {
-    // 1. Ссылки
+    // 1. Ссылки персонажа
     const linkColorVal = elements.linkColor.value.trim() ? `[url=${elements.linkColor.value.trim()}]Окрас[/url]` : 'Окрас';
     const linkRefVal = elements.linkRef.value.trim() ? `[url=${elements.linkRef.value.trim()}]Референс[/url]` : 'Референс';
     const linkArtVal = elements.linkArt.value.trim() ? `[url=${elements.linkArt.value.trim()}]Арт[/url]` : 'Арт';
 
     // Ресницы
     let lashVal = '–';
-    elements.eyelashes.forEach(r => { if(r.checked) lashVal = r.value; });
+    elements.eyelashes.forEach(r => { if (r.checked) lashVal = r.value; });
 
     // Румянец
     let blushVal = '–';
     if (elements.blushSelect.value === 'custom') {
-      blushVal = elements.blushCustom.value || 'Свой вариант';
+      blushVal = elements.blushCustom.value.trim() || 'Свой вариант';
     } else if (elements.blushSelect.value !== '–') {
       blushVal = `${elements.blushSelect.value} [${elements.blushColor.value}]`;
     }
@@ -146,14 +144,14 @@ document.addEventListener('DOMContentLoaded', () => {
     // Уши
     let earsVal = '–';
     if (elements.earsNum.value === 'custom') {
-      earsVal = elements.earsCustom.value || 'Свой вариант';
+      earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
     } else if (elements.earsNum.value !== '–') {
       earsVal = `${elements.earsNum.value} [${elements.earsType.value}]`;
     }
 
-    // Щёки, Хохолок, Чёлка, Грива, Шерсть, Хвост
+    // Вспомогательная функция для численных полей
     const getSimpleVal = (selectEl, customEl) => {
-      if (selectEl.value === 'custom') return customEl.value || 'Свой вариант';
+      if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
       return selectEl.value;
     };
 
@@ -167,43 +165,61 @@ document.addEventListener('DOMContentLoaded', () => {
     // Усы
     let whiskersVal = '–';
     if (elements.whiskersSelect.value === 'custom') {
-      whiskersVal = elements.whiskersCustom.value || 'Свой вариант';
+      whiskersVal = elements.whiskersCustom.value.trim() || 'Свой вариант';
     } else if (elements.whiskersSelect.value !== '–') {
       whiskersVal = `${elements.whiskersSelect.value} [${elements.whiskersColor.value}]`;
     }
 
     // Одежда
     let clothesVal = '–';
-    if (elements.clothesSelect.value === 'custom') {
-      clothesVal = elements.clothesCustom.value || 'Свой вариант';
-    } else if (elements.clothesSelect.value !== '–') {
-      clothesVal = elements.clothesCustom.value 
-        ? `${elements.clothesSelect.value} [${elements.clothesCustom.value}]` 
+    if (elements.clothesSelect.value !== '–') {
+      const baseName = elements.clothesSelect.value === 'custom' 
+        ? (elements.clothesCustom.value.trim() || 'Свой вариант')
         : elements.clothesSelect.value;
+
+      let extraDetails = [];
+      if (elements.clothesSelect.value !== 'custom' && elements.clothesCustom.value.trim()) {
+        extraDetails.push(elements.clothesCustom.value.trim());
+      }
+      if (elements.clothesLinkInput.value.trim()) {
+        extraDetails.push(`[url=${elements.clothesLinkInput.value.trim()}]фото[/url]`);
+      }
+
+      clothesVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
     }
 
     // Игрушка
     let toyVal = '–';
-    if (elements.toySelect.value === 'custom') {
-      toyVal = elements.toyCustom.value || 'Свой вариант';
-    } else if (elements.toySelect.value !== '–') {
-      toyVal = elements.toyCustom.value 
-        ? `${elements.toySelect.value} [${elements.toyCustom.value}]` 
+    if (elements.toySelect.value !== '–') {
+      const baseName = elements.toySelect.value === 'custom'
+        ? (elements.toyCustom.value.trim() || 'Свой вариант')
         : elements.toySelect.value;
+
+      let extraDetails = [];
+      if (elements.toySelect.value !== 'custom' && elements.toyCustom.value.trim()) {
+        extraDetails.push(elements.toyCustom.value.trim());
+      }
+      if (elements.toyLinkInput.value.trim()) {
+        extraDetails.push(`[url=${elements.toyLinkInput.value.trim()}]фото[/url]`);
+      }
+
+      toyVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
     }
 
     // Обводка
     let outlineVal = '–';
     if (elements.outlineSelect.value === 'custom') {
-      outlineVal = elements.outlineColor.value || 'Цветная';
+      outlineVal = elements.outlineColorPicker.value;
     } else {
       outlineVal = elements.outlineSelect.value;
     }
 
     // Фон
     let bgVal = elements.bgSelect.value;
-    if (bgVal === 'Однотонный' && elements.bgCustomColor.value) {
-      bgVal = `Однотонный [${elements.bgCustomColor.value}]`;
+    if (bgVal === 'Однотонный') {
+      bgVal = `Однотонный [${elements.bgColorPicker.value}]`;
+    } else if ((bgVal === 'Другие цвета' || bgVal === 'Другие элементы на фоне') && elements.bgCustomText.value.trim()) {
+      bgVal = `${bgVal} [${elements.bgCustomText.value.trim()}]`;
     }
 
     // Оплата
@@ -219,7 +235,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Сборка Шаблона
     const bbcode = `[code][b]1.[/b] ${linkColorVal}, ${linkRefVal}, ${linkArtVal}
-[b]2.[/b] ${elements.charNotes.value.trim() || 'Уточнения отсутствуют'}
+[b]2.[/b] ${elements.charNotes.value.trim() || '–'}
 [b]3.[/b] [header=детали]Детали[/header]
 [block=детали][b]Ресницы:[/b] ${lashVal}
 [b]Румянец:[/b] ${blushVal}
@@ -254,5 +270,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Первоначальный вызов
+  updateVisibility();
   generateBBCode();
 });
