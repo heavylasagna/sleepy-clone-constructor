@@ -682,6 +682,15 @@ document.addEventListener('DOMContentLoaded', () => {
       return '–';
     };
 
+    // Функция для получения текстового описания (как в одежде: номер + название) из выпадающего списка
+    const getCleanOptionText = (selectEl, customEl) => {
+      if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
+      if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
+        return selectEl.options[selectEl.selectedIndex].text;
+      }
+      return '–';
+    };
+
     let blushVal = '–';
     if (elements.blushSelect.value === 'custom') {
       blushVal = elements.blushCustom.value.trim() || 'Свой вариант';
@@ -759,11 +768,12 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
+    // ИСПРАВЛЕНИЕ ДЛЯ ИГРУШКИ: используем полное название пункта вместо цифры (аналогично одежде)
     let toyVal = '–';
     if (elements.toySelect.value === 'custom') {
       toyVal = elements.toyCustom.value.trim() || 'Свой вариант / Свой цвет';
     } else if (elements.toySelect.value !== '–') {
-      toyVal = getDigitOnly(elements.toySelect, elements.toyCustom);
+      toyVal = getCleanOptionText(elements.toySelect, elements.toyCustom);
     }
 
     let toyExtra = [];
