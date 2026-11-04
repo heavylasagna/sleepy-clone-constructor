@@ -18,7 +18,6 @@
   padding: 0;
 }
 
-/* Убираем скролл у всей страницы целиком */
 body {
   font-family: 'Nunito', sans-serif;
   background-color: var(--bg-main);
@@ -54,13 +53,12 @@ body {
   font-size: 0.85rem;
 }
 
-/* ДВУХКОЛОНОЧНЫЙ МАКЕТ */
 .constructor-workspace {
   display: grid;
   grid-template-columns: 1fr;
   gap: 16px;
   flex-grow: 1;
-  min-height: 0; /* Важно для работы flex/grid скролла */
+  min-height: 0;
 }
 
 @media (min-width: 900px) {
@@ -70,7 +68,6 @@ body {
   }
 }
 
-/* ЛЕВАЯ КОЛОНКА СО СВОИМ СКРОЛЛОМ */
 .left-sidebar {
   display: flex;
   flex-direction: column;
@@ -85,7 +82,6 @@ body {
   }
 }
 
-/* ПРАВАЯ КОЛОНКА СО СВОИМ СКРОЛЛОМ */
 @media (min-width: 900px) {
   .right-content-scrollable {
     height: 100%;
@@ -94,7 +90,6 @@ body {
   }
 }
 
-/* КАСТОМНЫЙ СКРОЛЛБАР */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -130,29 +125,29 @@ body {
   margin-bottom: 10px;
 }
 
-/* Превью 500x520 пикселей */
+/* Превью 500x520 со слоями поверх друг друга */
 .art-preview-box {
-  width: 100%;
+  position: relative;
   width: 500px;
   height: 520px;
   max-width: 100%;
   overflow: hidden;
   border-radius: 12px;
   border: 1px dashed var(--primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: var(--primary-light);
   margin: 0 auto;
 }
 
-.art-preview-box img {
+.art-layer {
+  position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: contain;
+  pointer-events: none;
 }
 
-/* Расценки */
 .pricing-content {
   background: #f8fafc;
   border: 1px dashed var(--panel-border);
@@ -168,7 +163,6 @@ body {
   text-align: center;
 }
 
-/* Формы */
 .form-grid {
   display: flex;
   flex-direction: column;
@@ -283,7 +277,6 @@ input[type="color"] {
   }
 }
 
-/* Код секция */
 .code-header {
   display: flex;
   justify-content: space-between;
