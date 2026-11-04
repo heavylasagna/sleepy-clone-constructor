@@ -104,7 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'sleepy_clone_constructor_data';
 
-  // Функция добавления строки вложения (поле текста изначально пустое, плейсхолдер "Текст")
   function addLinkRow(container, urlVal = '', labelVal = '') {
     const row = document.createElement('div');
     row.className = 'link-row';
@@ -143,7 +142,6 @@ document.addEventListener('DOMContentLoaded', () => {
     saveState();
   });
 
-  // Кастомные счетчики «+» и «−» для расценок
   document.querySelectorAll('.pricing-item.scalable').forEach(item => {
     const checkbox = item.querySelector('.price-check');
     const counter = item.querySelector('.price-counter');
@@ -803,9 +801,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.output.value = bbcode;
   }
 
-  // Проверка обязательных полей перед копированием
-  elements.btnCopy.addEventListener('click', (e) => {
-    // Список обязательных для выбора селектов (где значение не должно равняться '–' / 'Не выбрано')
+  elements.btnCopy.addEventListener('click', () => {
     const requiredSelects = [
       { el: elements.earsNum, name: 'Уши' }
     ];
