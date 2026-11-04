@@ -48,7 +48,7 @@ body {
   font-size: 1rem;
 }
 
-/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: ШИРОКОЕ ПРЕВЬЮ СЛЕВА И УЗКАЯ ФОРМА СПРАВА */
+/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: ШИРОКОЕ ПРЕВЬЮ СЛЕВА И ОЧЕНЬ УЗКАЯ ФОРМА СПРАВА */
 .constructor-workspace {
   display: grid;
   grid-template-columns: 1fr;
@@ -57,8 +57,8 @@ body {
 
 @media (min-width: 900px) {
   .constructor-workspace {
-    /* Левая колонка шире под превью, правая уже (примерно 1 к 2) */
-    grid-template-columns: 460px minmax(0, 1fr);
+    /* Левая колонка под фиксированное превью 760px, правая заполняет оставшееся место */
+    grid-template-columns: 780px minmax(0, 1fr);
     align-items: start;
   }
 }
@@ -96,11 +96,12 @@ body {
   margin-bottom: 16px;
 }
 
-/* Превью с увеличенной высотой под широкий сайдбар */
+/* Превью ровно 760x790 пикселей */
 .art-preview-box {
   width: 100%;
-  min-height: 540px;
-  max-height: 700px;
+  width: 760px;
+  height: 790px;
+  max-width: 100%;
   overflow: hidden;
   border-radius: 12px;
   border: 1px dashed var(--primary);
@@ -108,6 +109,7 @@ body {
   align-items: center;
   justify-content: center;
   background: var(--primary-light);
+  margin: 0 auto;
 }
 
 .art-preview-box img {
