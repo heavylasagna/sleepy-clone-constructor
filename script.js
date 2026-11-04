@@ -23,10 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
     maneSelect: document.getElementById('mane-select'),
     maneCustom: document.getElementById('mane-custom-text'),
 
-    furSelect: document.getElementById('fur-select'),
+    furBodyCheck: document.getElementById('fur-body-check'),
+    furPawCheck: document.getElementById('fur-paw-check'),
+    furEarCheck: document.getElementById('fur-ear-check'),
+    furCustomCheck: document.getElementById('fur-custom-check'),
     furCustom: document.getElementById('fur-custom-text'),
-    optBodyfur: document.getElementById('opt-bodyfur'),
-    optPawfur: document.getElementById('opt-pawfur'),
+    optBodyfurWrap: document.getElementById('opt-bodyfur-wrap'),
+    optPawfurWrap: document.getElementById('opt-pawfur-wrap'),
 
     tailSelect: document.getElementById('tail-select'),
     tailCustom: document.getElementById('tail-custom-text'),
@@ -76,6 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
     toast: document.getElementById('toast'),
     totalPriceEl: document.getElementById('total-price'),
 
+    previewContainer: document.getElementById('preview-container'),
     layerBg: document.getElementById('layer-bg'),
     layerBase: document.getElementById('layer-base'),
     layerLashes: document.getElementById('layer-lashes'),
@@ -86,7 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
     layerEartufts: document.getElementById('layer-eartufts'),
     layerTuft: document.getElementById('layer-tuft'),
     layerFringe: document.getElementById('layer-fringe'),
-    layerFur: document.getElementById('layer-fur'),
+    layerFurBody: document.getElementById('layer-fur-body'),
+    layerFurPaw: document.getElementById('layer-fur-paw'),
+    layerFurEar: document.getElementById('layer-fur-ear'),
     layerTail: document.getElementById('layer-tail'),
     layerWhiskers: document.getElementById('layer-whiskers'),
     layerBlush: document.getElementById('layer-blush'),
@@ -98,19 +104,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'sleepy_clone_constructor_data';
 
-  // Функция добавления строки ссылки
-  function addLinkRow(container, urlVal = '', labelVal = 'фото') {
+  // Функция добавления строки вложения
+  function addLinkRow(container, urlVal = '', labelVal = 'Текст') {
     const row = document.createElement('div');
     row.className = 'link-row';
     row.innerHTML = `
-      <input type="url" class="link-url-input" placeholder="Ссылка на изображение" value="${urlVal}">
-      <input type="text" class="link-label-input" placeholder="Текст" value="${labelVal}" style="width: 100px;">
+      <input type="url" class="link-url-input" placeholder="Ссылка" value="${urlVal}">
+      <input type="text" class="link-label-input" placeholder="Текст" value="${labelVal}">
       <button type="button" class="btn-remove-link">−</button>
     `;
 
     row.querySelector('.btn-remove-link').addEventListener('click', () => {
       row.remove();
-      updateVisibility();
       updatePreviewLayers();
       generateBBCode();
       saveState();
@@ -127,13 +132,53 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   elements.btnAddClothesLink.addEventListener('click', () => {
-    addLinkRow(elements.clothesLinksContainer, '', 'фото');
+    addLinkRow(elements.clothesLinksContainer, '', 'Текст');
+    generateBBCode();
     saveState();
   });
 
   elements.btnAddToyLink.addEventListener('click', () => {
-    addLinkRow(elements.toyLinksContainer, '', 'фото');
+    addLinkRow(elements.toyLinksContainer, '', 'Текст');
+    generateBBCode();
     saveState();
+  });
+
+  // Кастомные счетчики «+» и «−» для расценок
+  document.querySelectorAll('.pricing-item.scalable').forEach(item => {
+    const checkbox = item.querySelector('.price-check');
+    const counter = item.querySelector('.price-counter');
+    const qtyInput = item.querySelector('.price-qty');
+    const btnMinus = item.querySelector('.stepper-btn.minus');
+    const btnPlus = item.querySelector('.stepper-btn.plus');
+
+    checkbox.addEventListener('change', () => {
+      counter.classList.toggle('hidden', !checkbox.checked);
+      calculateTotal();
+      saveState();
+    });
+
+    btnPlus.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      qtyInput.value = val + 1;
+      calculateTotal();
+      saveState();
+    });
+
+    btnMinus.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val > 1) {
+        qtyInput.value = val - 1;
+        calculateTotal();
+        saveState();
+      }
+    });
+  });
+
+  document.querySelectorAll('.pricing-item:not(.scalable) .price-check').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      calculateTotal();
+      saveState();
+    });
   });
 
   function calculateTotal() {
@@ -161,36 +206,12 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.totalPriceEl.textContent = `${totalKrol} кролей / ${totalRub} рублей`;
   }
 
-  document.querySelectorAll('.pricing-item.scalable').forEach(item => {
-    const checkbox = item.querySelector('.price-check');
-    const counter = item.querySelector('.price-counter');
-    const qtyInput = item.querySelector('.price-qty');
-
-    checkbox.addEventListener('change', () => {
-      counter.classList.toggle('hidden', !checkbox.checked);
-      calculateTotal();
-      saveState();
-    });
-
-    qtyInput.addEventListener('input', () => {
-      calculateTotal();
-      saveState();
-    });
-  });
-
-  document.querySelectorAll('.pricing-item:not(.scalable) .price-check').forEach(checkbox => {
-    checkbox.addEventListener('change', () => {
-      calculateTotal();
-      saveState();
-    });
-  });
-
   function getLinksString(container) {
     const rows = container.querySelectorAll('.link-row');
     const links = [];
     rows.forEach(row => {
       const url = row.querySelector('.link-url-input').value.trim();
-      const label = row.querySelector('.link-label-input').value.trim() || 'фото';
+      const label = row.querySelector('.link-label-input').value.trim() || 'Текст';
       if (url) {
         links.push(`[url=${url}]${label}[/url]`);
       }
@@ -237,7 +258,10 @@ document.addEventListener('DOMContentLoaded', () => {
       bangsSelect: elements.bangsSelect.value,
       maneSelect: elements.maneSelect.value,
       maneCustom: elements.maneCustom.value,
-      furSelect: elements.furSelect.value,
+      furBody: elements.furBodyCheck.checked,
+      furPaw: elements.furPawCheck.checked,
+      furEar: elements.furEarCheck.checked,
+      furCustomChk: elements.furCustomCheck.checked,
       furCustom: elements.furCustom.value,
       tailSelect: elements.tailSelect.value,
       tailCustom: elements.tailCustom.value,
@@ -296,8 +320,13 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.bangsSelect) elements.bangsSelect.value = data.bangsSelect;
       if (data.maneSelect) elements.maneSelect.value = data.maneSelect;
       if (data.maneCustom) elements.maneCustom.value = data.maneCustom;
-      if (data.furSelect) elements.furSelect.value = data.furSelect;
+      
+      if (data.furBody !== undefined) elements.furBodyCheck.checked = data.furBody;
+      if (data.furPaw !== undefined) elements.furPawCheck.checked = data.furPaw;
+      if (data.furEar !== undefined) elements.furEarCheck.checked = data.furEar;
+      if (data.furCustomChk !== undefined) elements.furCustomCheck.checked = data.furCustomChk;
       if (data.furCustom) elements.furCustom.value = data.furCustom;
+
       if (data.tailSelect) elements.tailSelect.value = data.tailSelect;
       if (data.tailCustom) elements.tailCustom.value = data.tailCustom;
       if (data.whiskersSelect) elements.whiskersSelect.value = data.whiskersSelect;
@@ -375,8 +404,9 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.cheeksCustom.classList.toggle('hidden', elements.cheeksSelect.value !== 'custom');
     elements.tuftCustom.classList.toggle('hidden', elements.tuftSelect.value !== 'custom');
     elements.maneCustom.classList.toggle('hidden', elements.maneSelect.value !== 'custom');
-    elements.furCustom.classList.toggle('hidden', elements.furSelect.value !== 'custom');
     elements.tailCustom.classList.toggle('hidden', elements.tailSelect.value !== 'custom');
+
+    elements.furCustom.classList.toggle('hidden', !elements.furCustomCheck.checked);
 
     const isWhiskersCustom = elements.whiskersSelect.value === 'custom';
     const isWhiskersActive = elements.whiskersSelect.value !== '–' && !isWhiskersCustom;
@@ -387,13 +417,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const isClosedOrLongSleeves = (clothesVal === 'slip1.png' || clothesVal === 'slip2.png');
     const isShortSleeves = (clothesVal === 'slip3.png');
 
-    elements.optBodyfur.style.display = (isClosedOrLongSleeves || isShortSleeves) ? 'none' : 'block';
-    elements.optPawfur.style.display = isClosedOrLongSleeves ? 'none' : 'block';
+    elements.optBodyfurWrap.style.display = (isClosedOrLongSleeves || isShortSleeves) ? 'none' : 'flex';
+    elements.optPawfurWrap.style.display = isClosedOrLongSleeves ? 'none' : 'flex';
 
-    const currentFur = elements.furSelect.value;
-    if ((isClosedOrLongSleeves && (currentFur === 'bodyfur.png' || currentFur === 'pawfur.png')) ||
-        (isShortSleeves && currentFur === 'bodyfur.png')) {
-      elements.furSelect.value = '–';
+    if (isClosedOrLongSleeves) {
+      elements.furBodyCheck.checked = false;
+      elements.furPawCheck.checked = false;
+    } else if (isShortSleeves) {
+      elements.furBodyCheck.checked = false;
     }
 
     const isClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
@@ -415,8 +446,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updatePreviewLayers() {
-    elements.layerBg.src = "images/background.png";
-    elements.layerBg.style.display = 'block';
+    // 1. Управление фоном
+    const bgVal = elements.bgSelect.value;
+    if (bgVal === 'Прозрачный') {
+      elements.layerBg.style.display = 'none';
+      elements.previewContainer.style.background = 'transparent';
+      elements.previewContainer.style.borderStyle = 'dashed';
+    } else if (bgVal === 'Однотонный') {
+      elements.layerBg.style.display = 'none';
+      elements.previewContainer.style.background = elements.bgColorPicker.value;
+    } else {
+      elements.layerBg.src = "images/background.png";
+      elements.layerBg.style.display = 'block';
+      elements.previewContainer.style.background = '';
+    }
 
     const toyVal = elements.toySelect.value;
     if (toyVal !== '–' && toyVal !== 'custom') {
@@ -449,12 +492,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     const earVal = elements.earsNum.value;
+    let earIndex = '1';
     if (earVal !== '–' && earVal !== 'custom') {
       elements.layerEars.src = `images/${earVal}`;
       elements.layerEars.style.display = 'block';
 
       const earNumMatch = earVal.match(/\d+/);
-      const earIndex = earNumMatch ? earNumMatch[0] : '1';
+      earIndex = earNumMatch ? earNumMatch[0] : '1';
 
       if (elements.earFurCheck.checked) {
         elements.layerEarfur.src = `images/earfur${earIndex}.png`;
@@ -491,18 +535,26 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerFringe.style.display = 'none';
     }
 
-    const furVal = elements.furSelect.value;
-    if (furVal === 'earfur') {
-      const earVal = elements.earsNum.value;
-      const earNumMatch = earVal.match(/\d+/);
-      const earIndex = earNumMatch ? earNumMatch[0] : '1';
-      elements.layerFur.src = `images/furear${earIndex}.png`;
-      elements.layerFur.style.display = 'block';
-    } else if (furVal !== '–' && furVal !== 'custom') {
-      elements.layerFur.src = `images/${furVal}`;
-      elements.layerFur.style.display = 'block';
+    // Обработка шерсти (чекбоксы)
+    if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') {
+      elements.layerFurBody.src = "images/bodyfur.png";
+      elements.layerFurBody.style.display = 'block';
     } else {
-      elements.layerFur.style.display = 'none';
+      elements.layerFurBody.style.display = 'none';
+    }
+
+    if (elements.furPawCheck.checked && elements.optPawfurWrap.style.display !== 'none') {
+      elements.layerFurPaw.src = "images/pawfur.png";
+      elements.layerFurPaw.style.display = 'block';
+    } else {
+      elements.layerFurPaw.style.display = 'none';
+    }
+
+    if (elements.furEarCheck.checked && earVal !== '–' && earVal !== 'custom') {
+      elements.layerFurEar.src = `images/furear${earIndex}.png`;
+      elements.layerFurEar.style.display = 'block';
+    } else {
+      elements.layerFurEar.style.display = 'none';
     }
 
     const tailVal = elements.tailSelect.value;
@@ -552,8 +604,9 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerCheeks.style.display = 'none';
     }
 
+    // Освещение (скрывается при прозрачном фоне)
     const timeVal = elements.timeSelect.value;
-    if (timeVal !== '–') {
+    if (timeVal !== '–' && bgVal !== 'Прозрачный') {
       elements.layerLight.src = `images/${timeVal}`;
       elements.layerLight.style.display = 'block';
     } else {
@@ -562,7 +615,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('input, select, textarea').forEach(item => {
-    if (!item.classList.contains('link-url-input') && !item.classList.contains('link-label-input')) {
+    if (!item.classList.contains('link-url-input') && !item.classList.contains('link-label-input') && !item.classList.contains('price-qty')) {
       item.addEventListener('input', () => {
         updateVisibility();
         updatePreviewLayers();
@@ -628,16 +681,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const bangsVal = elements.bangsSelect.value !== '–' ? getDigitOnly(elements.bangsSelect) : '–';
     const maneVal = getDigitOnly(elements.maneSelect, elements.maneCustom);
     
-    let furVal = '–';
-    if (elements.furSelect.value === 'custom') {
-      furVal = elements.furCustom.value.trim() || 'Свой вариант';
-    } else if (elements.furSelect.value === 'earfur') {
-      furVal = 'На ушах';
-    } else if (elements.furSelect.value === 'bodyfur.png') {
-      furVal = 'На теле';
-    } else if (elements.furSelect.value === 'pawfur.png') {
-      furVal = 'На лапах';
-    }
+    // Сборка выбранной шерсти
+    let furParts = [];
+    if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') furParts.push('На теле');
+    if (elements.furPawCheck.checked && elements.optPawfurWrap.style.display !== 'none') furParts.push('На лапах');
+    if (elements.furEarCheck.checked) furParts.push('На ушах');
+    if (elements.furCustomCheck.checked) furParts.push(elements.furCustom.value.trim() || 'Свой вариант');
+
+    let furVal = furParts.length > 0 ? furParts.join(', ') : '–';
 
     const tailVal = getDigitOnly(elements.tailSelect, elements.tailCustom);
 
@@ -765,12 +816,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   loadState();
-  if (elements.clothesLinksContainer.children.length === 0) {
-    addLinkRow(elements.clothesLinksContainer, '', 'фото');
-  }
-  if (elements.toyLinksContainer.children.length === 0) {
-    addLinkRow(elements.toyLinksContainer, '', 'фото');
-  }
   updateVisibility();
   updatePreviewLayers();
   calculateTotal();
