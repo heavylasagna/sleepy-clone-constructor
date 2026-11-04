@@ -682,7 +682,6 @@ document.addEventListener('DOMContentLoaded', () => {
       return '–';
     };
 
-    // Функция для получения текстового описания (как в одежде: номер + название) из выпадающего списка
     const getCleanOptionText = (selectEl, customEl) => {
       if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
       if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
@@ -768,7 +767,6 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     }
 
-    // ИСПРАВЛЕНИЕ ДЛЯ ИГРУШКИ: используем полное название пункта вместо цифры (аналогично одежде)
     let toyVal = '–';
     if (elements.toySelect.value === 'custom') {
       toyVal = elements.toyCustom.value.trim() || 'Свой вариант / Свой цвет';
