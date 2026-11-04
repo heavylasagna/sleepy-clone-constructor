@@ -124,7 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.socialLink.classList.toggle('hidden', isLSPos);
   }
 
-  // Обновление слоев превью с учетом lashes.png
+  // Обновление слоев превью
   function updatePreviewLayers() {
     elements.layerBg.src = "images/background.png";
     elements.layerBg.style.display = 'block';
