@@ -1,329 +1,37 @@
-:root {
-  --bg-main: #f0f9ff;
-  --panel-bg: #ffffff;
-  --panel-border: #bae6fd;
-  --primary: #0284c7;
-  --primary-hover: #0369a1;
-  --primary-light: #e0f2fe;
-  --text-dark: #0c4a6e;
-  --text-muted: #64748b;
-  --radius: 16px;
-  --shadow: 0 4px 20px -2px rgba(56, 189, 248, 0.15);
-  --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: 'Nunito', sans-serif;
-  background-color: var(--bg-main);
-  color: var(--text-dark);
-  padding: 16px;
-  height: 100vh;
-  overflow: hidden;
-}
-
-.app-container {
-  max-width: 1350px;
-  height: 100%;
-  margin: 0 auto;
+.link-row {
   display: flex;
-  flex-direction: column;
-}
-
-.app-header {
-  text-align: center;
-  margin-bottom: 12px;
-  flex-shrink: 0;
-}
-
-.app-header h1 {
-  font-family: 'Comfortaa', cursive;
-  font-size: 1.6rem;
-  color: var(--primary);
-  margin-bottom: 2px;
-}
-
-.app-header p {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-}
-
-.constructor-workspace {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 16px;
-  flex-grow: 1;
-  min-height: 0;
-}
-
-@media (min-width: 900px) {
-  .constructor-workspace {
-    grid-template-columns: 540px minmax(0, 1fr);
-    align-items: start;
-  }
-}
-
-.left-sidebar {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-@media (min-width: 900px) {
-  .left-sidebar {
-    height: 100%;
-    overflow-y: auto;
-    padding-right: 4px;
-  }
-}
-
-@media (min-width: 900px) {
-  .right-content-scrollable {
-    height: 100%;
-    overflow-y: auto;
-    padding-right: 8px;
-  }
-}
-
-::-webkit-scrollbar {
-  width: 8px;
-}
-
-::-webkit-scrollbar-track {
-  background: rgba(224, 242, 254, 0.5);
-  border-radius: 8px;
-}
-
-::-webkit-scrollbar-thumb {
-  background: #38bdf8;
-  border-radius: 8px;
-  border: 2px solid rgba(255, 255, 255, 0.5);
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: #0284c7;
-}
-
-.card {
-  background: var(--panel-bg);
-  border: 2px solid var(--panel-border);
-  border-radius: var(--radius);
-  padding: 16px;
-  margin-bottom: 16px;
-  box-shadow: var(--shadow);
-}
-
-.card h2 {
-  font-family: 'Comfortaa', cursive;
-  font-size: 1.1rem;
-  color: var(--primary);
-  margin-bottom: 10px;
-}
-
-/* Превью 500x520 со слоями поверх друг друга */
-.art-preview-box {
-  position: relative;
-  width: 500px;
-  height: 520px;
-  max-width: 100%;
-  overflow: hidden;
-  border-radius: 12px;
-  border: 1px dashed var(--primary);
-  background: var(--primary-light);
-  margin: 0 auto;
-}
-
-.art-layer {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  pointer-events: none;
-}
-
-.pricing-content {
-  background: #f8fafc;
-  border: 1px dashed var(--panel-border);
-  border-radius: 12px;
-  padding: 12px;
-  min-height: 50px;
-}
-
-.pricing-empty {
-  font-size: 0.85rem;
-  color: var(--text-muted);
-  font-style: italic;
-  text-align: center;
-}
-
-.form-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.option-group {
-  background: #f8fafc;
-  padding: 10px 14px;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-}
-
-.group-title {
-  font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--primary);
-  margin-bottom: 6px;
-  display: block;
-}
-
-.radio-buttons {
-  display: flex;
-  gap: 20px;
-}
-
-.radio-buttons label {
-  display: flex;
-  align-items: center;
   gap: 6px;
-  cursor: pointer;
-  font-size: 0.9rem;
-}
-
-.inline-selects {
-  display: flex;
-  gap: 10px;
   align-items: center;
-  flex-wrap: wrap;
 }
 
-.styled-select, .custom-input, input[type="text"], input[type="url"], textarea {
-  width: 100%;
-  padding: 8px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--panel-border);
-  background: #fff;
-  color: var(--text-dark);
-  font-family: inherit;
-  font-size: 0.9rem;
-  outline: none;
-  transition: var(--transition);
+.link-row input[type="url"] {
+  flex: 1;
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-.styled-select:focus, .custom-input:focus, input:focus, textarea:focus {
-  border-color: var(--primary);
-  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+.link-row input[type="text"] {
+  padding: 6px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
 }
 
-.color-picker-wrap {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-input[type="color"] {
-  border: none;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  cursor: pointer;
-  background: none;
-}
-
-.custom-input {
-  margin-top: 6px;
-}
-
-.hidden {
-  display: none !important;
-}
-
-.input-field {
-  margin-bottom: 12px;
-}
-
-.input-field label {
-  font-weight: 700;
-  display: block;
-  margin-bottom: 4px;
-  color: var(--primary);
-  font-size: 0.9rem;
-}
-
-.link-inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.grid-2col {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 10px;
-}
-
-@media (min-width: 600px) {
-  .grid-2col {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
-.code-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-}
-
-.btn-copy {
-  background: var(--primary);
-  color: #fff;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 700;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: var(--transition);
-}
-
-.btn-copy:hover {
-  background: var(--primary-hover);
-}
-
-#bbcode-output {
-  font-family: monospace;
-  background: #0f172a;
-  color: #38bdf8;
-  border-radius: 10px;
-  resize: vertical;
-  font-size: 0.85rem;
-}
-
-.toast {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #10b981;
+.btn-add-link {
+  background: #2ecc71;
   color: white;
-  padding: 10px 20px;
-  border-radius: 10px;
-  font-weight: 700;
-  font-size: 0.9rem;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  pointer-events: none;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
 }
 
-.toast.show {
-  opacity: 1;
+.btn-remove-link {
+  background: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  padding: 6px 10px;
 }
