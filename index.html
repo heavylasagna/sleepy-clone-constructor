@@ -27,7 +27,6 @@
           <div class="art-preview-box" id="preview-container">
             <img id="layer-bg" class="art-layer" src="images/background.png" alt="Фон">
             
-            <!-- Игрушка между фоном и базой -->
             <img id="layer-toy" class="art-layer" src="" alt="" style="display:none;">
             
             <img id="layer-base" class="art-layer" src="images/base.png" alt="База">
@@ -38,7 +37,6 @@
             <img id="layer-earfur" class="art-layer" src="" alt="" style="display:none;">
             <img id="layer-eartufts" class="art-layer" src="" alt="" style="display:none;">
             
-            <!-- Хохолок и чёлка выше ушей -->
             <img id="layer-tuft" class="art-layer" src="" alt="" style="display:none;">
             <img id="layer-fringe" class="art-layer" src="" alt="" style="display:none;">
             
@@ -58,7 +56,154 @@
         <div class="card pricing-card">
           <h2>Расценки</h2>
           <div class="pricing-content">
-            <p class="pricing-empty">Здесь будут указаны расценки на детали и дополнения.</p>
+            
+            <div class="pricing-base-box">
+              <h3>Базовая стоимость:</h3>
+              <p><strong>1200 кролей / 400 рублей</strong></p>
+            </div>
+
+            <div class="pricing-list">
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="0" data-rub="0">
+                <div class="price-info">
+                  <span class="price-title">Шрамы / Простой пирсинг / Минимальные изменения в лайне</span>
+                  <span class="price-free">Бесплатно</span>
+                </div>
+              </label>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="0" data-rub="0">
+                <div class="price-info">
+                  <span class="price-title">Смена цвета игрушки или одежды</span>
+                  <span class="price-desc">Заливка без узоров</span>
+                  <span class="price-free">Бесплатно</span>
+                </div>
+              </label>
+
+              <div class="pricing-item scalable">
+                <label class="pricing-main-label">
+                  <input type="checkbox" class="price-check" data-krol="30" data-rub="10">
+                  <div class="price-info">
+                    <span class="price-title">Свой простой дизайн одежды</span>
+                    <span class="price-desc">Фигуры, узоры, большие участки разных цветов</span>
+                    <span class="price-cost">30 кролей / 10 рублей за вид</span>
+                  </div>
+                </label>
+                <div class="price-counter hidden">
+                  <span>Кол-во:</span>
+                  <input type="number" class="price-qty" min="1" value="1">
+                </div>
+              </div>
+
+              <div class="pricing-item scalable">
+                <label class="pricing-main-label">
+                  <input type="checkbox" class="price-check" data-krol="60" data-rub="20">
+                  <div class="price-info">
+                    <span class="price-title">Свой сложный дизайн одежды</span>
+                    <span class="price-desc">Сложные рисунки, маленькие детали</span>
+                    <span class="price-cost">60 кролей / 20 рублей за вид</span>
+                  </div>
+                </label>
+                <div class="price-counter hidden">
+                  <span>Кол-во:</span>
+                  <input type="number" class="price-qty" min="1" value="1">
+                </div>
+              </div>
+
+              <div class="pricing-item scalable">
+                <label class="pricing-main-label">
+                  <input type="checkbox" class="price-check" data-krol="60" data-rub="20">
+                  <div class="price-info">
+                    <span class="price-title">Простые аксессуары или игрушка</span>
+                    <span class="price-desc">Перья, листья, цветы, плюшевая игрушка</span>
+                    <span class="price-cost">60 кролей / 20 рублей за вид</span>
+                  </div>
+                </label>
+                <div class="price-counter hidden">
+                  <span>Кол-во:</span>
+                  <input type="number" class="price-qty" min="1" value="1">
+                </div>
+              </div>
+
+              <div class="pricing-item scalable">
+                <label class="pricing-main-label">
+                  <input type="checkbox" class="price-check" data-krol="120" data-rub="40">
+                  <div class="price-info">
+                    <span class="price-title">Сложные аксессуары или игрушка</span>
+                    <span class="price-desc">Много деталей, сложные узоры, геометрические фигуры, покрывает большую часть персонажа</span>
+                    <span class="price-cost">120 кролей / 40 рублей за вид</span>
+                  </div>
+                </label>
+                <div class="price-counter hidden">
+                  <span>Кол-во:</span>
+                  <input type="number" class="price-qty" min="1" value="1">
+                </div>
+              </div>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="120" data-rub="40">
+                <div class="price-info">
+                  <span class="price-title">Другие части тела</span>
+                  <span class="price-cost">120 кролей / 40 рублей за все изменения</span>
+                </div>
+              </label>
+
+              <div class="pricing-item scalable">
+                <label class="pricing-main-label">
+                  <input type="checkbox" class="price-check" data-krol="150" data-rub="50">
+                  <div class="price-info">
+                    <span class="price-title">Одежда / Протезы / Головные уборы / Волосы</span>
+                    <span class="price-cost">150 кролей / 50 рублей за вид</span>
+                  </div>
+                </label>
+                <div class="price-counter hidden">
+                  <span>Кол-во:</span>
+                  <input type="number" class="price-qty" min="1" value="1">
+                </div>
+              </div>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="300" data-rub="100">
+                <div class="price-info">
+                  <span class="price-title">Сменить животное / Сделать человека</span>
+                  <span class="price-cost">300 кролей / 100 рублей</span>
+                </div>
+              </label>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="90" data-rub="30">
+                <div class="price-info">
+                  <span class="price-title">Простые изменения в фоне</span>
+                  <span class="price-desc">Поменять цвета декора, узоры, минимальные изменения в лайне</span>
+                  <span class="price-cost">90 кролей / 30 рублей</span>
+                </div>
+              </label>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="300" data-rub="100">
+                <div class="price-info">
+                  <span class="price-title">Сложные изменения в фоне</span>
+                  <span class="price-desc">Смена декораций</span>
+                  <span class="price-cost">300 кролей / 100 рублей</span>
+                </div>
+              </label>
+
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="900" data-rub="300">
+                <div class="price-info">
+                  <span class="price-title">Фон с нуля</span>
+                  <span class="price-desc">Фон полностью меняется под ваши желания</span>
+                  <span class="price-cost">900 кролей / 300 рублей</span>
+                </div>
+              </label>
+
+            </div>
+
+            <div class="pricing-total-box">
+              <span>Итого:</span>
+              <strong id="total-price">1200 кролей / 400 рублей</strong>
+            </div>
+
           </div>
         </div>
       </aside>
@@ -249,11 +394,19 @@
               </select>
               
               <div style="margin-top: 10px;">
-                <label><input type="checkbox" id="paci-check"> <span>Соска (paci.png)</span></label>
+                <label><input type="checkbox" id="paci-check"> <span>Соска</span></label>
               </div>
 
               <input type="text" id="clothes-custom-text" class="custom-input hidden" placeholder="Опишите цвет, узор или свой вариант одежды...">
-              <input type="url" id="clothes-link-input" class="custom-input hidden" placeholder="Ссылка на изображение одежды (опционально)">
+              
+              <!-- Множественные ссылки для одежды -->
+              <div id="clothes-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
+                <div class="link-row">
+                  <input type="url" class="clothes-link-url" placeholder="Ссылка на изображение одежды">
+                  <input type="text" class="clothes-link-label" placeholder="Текст (напр. фото)" value="фото" style="width: 100px;">
+                  <button type="button" class="btn-add-link" id="btn-add-clothes-link" style="padding: 4px 10px; cursor: pointer;">+</button>
+                </div>
+              </div>
             </div>
 
             <!-- Игрушка -->
@@ -270,7 +423,15 @@
                 <option value="custom">Свой вариант / Свой цвет</option>
               </select>
               <input type="text" id="toy-custom-text" class="custom-input hidden" placeholder="Опишите свою игрушку или цвет...">
-              <input type="url" id="toy-link-input" class="custom-input hidden" placeholder="Ссылка на изображение игрушки (опционально)">
+              
+              <!-- Множественные ссылки для игрушки -->
+              <div id="toy-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
+                <div class="link-row">
+                  <input type="url" class="toy-link-url" placeholder="Ссылка на изображение игрушки">
+                  <input type="text" class="toy-link-label" placeholder="Текст (напр. фото)" value="фото" style="width: 100px;">
+                  <button type="button" class="btn-add-link" id="btn-add-toy-link" style="padding: 4px 10px; cursor: pointer;">+</button>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -364,7 +525,6 @@
             </div>
           </div>
 
-          <!-- Кнопка сброса настроек в самом низу -->
           <div class="input-field" style="margin-top: 24px; text-align: center;">
             <button id="btn-reset" type="button" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">Сбросить настройки</button>
           </div>
