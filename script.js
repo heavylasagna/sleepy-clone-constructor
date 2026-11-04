@@ -8,7 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
     blushCustom: document.getElementById('blush-custom-text'),
     
     earsNum: document.getElementById('ears-num'),
-    earsType: document.getElementById('ears-type'),
+    earFurCheck: document.getElementById('ear-fur-check'),
+    earTuftsCheck: document.getElementById('ear-tufts-check'),
     earsCustom: document.getElementById('ears-custom-text'),
 
     cheeksSelect: document.getElementById('cheeks-select'),
@@ -24,6 +25,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     furSelect: document.getElementById('fur-select'),
     furCustom: document.getElementById('fur-custom-text'),
+    optBodyfur: document.getElementById('opt-bodyfur'),
+    optPawfur: document.getElementById('opt-pawfur'),
 
     tailSelect: document.getElementById('tail-select'),
     tailCustom: document.getElementById('tail-custom-text'),
@@ -34,6 +37,7 @@ document.addEventListener('DOMContentLoaded', () => {
     whiskersCustom: document.getElementById('whiskers-custom-text'),
 
     clothesSelect: document.getElementById('clothes-select'),
+    paciCheck: document.getElementById('paci-check'),
     clothesCustom: document.getElementById('clothes-custom-text'),
     clothesLinkInput: document.getElementById('clothes-link-input'),
 
@@ -73,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
     layerBase: document.getElementById('layer-base'),
     layerLashes: document.getElementById('layer-lashes'),
     layerEars: document.getElementById('layer-ears'),
+    layerEarfur: document.getElementById('layer-earfur'),
     layerEartufts: document.getElementById('layer-eartufts'),
     layerCheeks: document.getElementById('layer-cheeks'),
     layerTuft: document.getElementById('layer-tuft'),
@@ -83,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
     layerWhiskers: document.getElementById('layer-whiskers'),
     layerBlush: document.getElementById('layer-blush'),
     layerClothes: document.getElementById('layer-clothes'),
+    layerPaci: document.getElementById('layer-paci'),
     layerToy: document.getElementById('layer-toy'),
     layerLight: document.getElementById('layer-light')
   };
@@ -106,9 +112,22 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.whiskersCustom.classList.toggle('hidden', !isWhiskersCustom);
     elements.whiskersColorWrap.classList.toggle('hidden', !isWhiskersActive);
 
-    const isClothesSelected = elements.clothesSelect.value !== '–';
-    elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
-    elements.clothesLinkInput.classList.toggle('hidden', !isClothesSelected);
+    const clothesVal = elements.clothesSelect.value;
+    const isClosedOrLongSleeves = (clothesVal === 'slip1.png' || clothesVal === 'slip2.png');
+    const isShortSleeves = (clothesVal === 'slip3.png');
+
+    elements.optBodyfur.style.display = (isClosedOrLongSleeves || isShortSleeves) ? 'none' : 'block';
+    elements.optPawfur.style.display = isClosedOrLongSleeves ? 'none' : 'block';
+
+    const currentFur = elements.furSelect.value;
+    if ((isClosedOrLongSleeves && (currentFur === 'bodyfur.png' || currentFur === 'pawfur.png')) ||
+        (isShortSleeves && currentFur === 'bodyfur.png')) {
+      elements.furSelect.value = '–';
+    }
+
+    const isльникClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
+    elements.clothesCustom.classList.toggle('hidden', !isльникClothesSelected);
+    elements.clothesLinkInput.classList.toggle('hidden', !isльникClothesSelected);
 
     const isToySelected = elements.toySelect.value !== '–';
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
@@ -151,21 +170,23 @@ document.addEventListener('DOMContentLoaded', () => {
 
       const earNumMatch = earVal.match(/\d+/);
       const earIndex = earNumMatch ? earNumMatch[0] : '1';
-      const earType = elements.earsType.value;
 
-      if (earType === 'С кисточками') {
+      if (elements.earFurCheck.checked) {
+        elements.layerEarfur.src = `images/earfur${earIndex}.png`;
+        elements.layerEarfur.style.display = 'block';
+      } else {
+        elements.layerEarfur.style.display = 'none';
+      }
+
+      if (elements.earTuftsCheck.checked) {
         elements.layerEartufts.src = `images/eartufts${earIndex}.png`;
         elements.layerEartufts.style.display = 'block';
       } else {
         elements.layerEartufts.style.display = 'none';
       }
-
-      if (earType === 'С шерстью') {
-        elements.layerEartufts.src = `images/earfur${earIndex}.png`;
-        elements.layerEartufts.style.display = 'block';
-      }
     } else {
       elements.layerEars.style.display = 'none';
+      elements.layerEarfur.style.display = 'none';
       elements.layerEartufts.style.display = 'none';
     }
 
@@ -256,6 +277,14 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerClothes.style.display = 'none';
     }
 
+    // Соска
+    if (elements.paciCheck.checked) {
+      elements.layerPaci.src = "images/paci.png";
+      elements.layerPaci.style.display = 'block';
+    } else {
+      elements.layerPaci.style.display = 'none';
+    }
+
     // Игрушка
     const toyVal = elements.toySelect.value;
     if (toyVal !== '–' && toyVal !== 'custom') {
@@ -316,7 +345,11 @@ document.addEventListener('DOMContentLoaded', () => {
       earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
     } else if (elements.earsNum.value !== '–') {
       const earName = elements.earsNum.options[elements.earsNum.selectedIndex].text;
-      earsVal = `${earName} [${elements.earsType.value}]`;
+      let earAddons = [];
+      if (elements.earFurCheck.checked) earAddons.push('шерсть в ушах');
+      if (elements.earTuftsCheck.checked) earAddons.push('кисточки');
+      
+      earsVal = earAddons.length > 0 ? `${earName} [${earAddons.join(', ')}]` : earName;
     }
 
     const getSimpleVal = (selectEl, customEl) => {
@@ -351,12 +384,19 @@ document.addEventListener('DOMContentLoaded', () => {
       whiskersVal = `${whiskName} [${elements.whiskersColor.value}]`;
     }
 
-    let clothesVal = '–';
+    let clothesParts = [];
     if (elements.clothesSelect.value !== '–') {
       const baseName = elements.clothesSelect.value === 'custom' 
         ? (elements.clothesCustom.value.trim() || 'Свой вариант')
         : elements.clothesSelect.options[elements.clothesSelect.selectedIndex].text;
+      clothesParts.push(baseName);
+    }
+    if (elements.paciCheck.checked) {
+      clothesParts.push('Соска');
+    }
 
+    let clothesVal = '–';
+    if (clothesParts.length > 0) {
       let extraDetails = [];
       if (elements.clothesSelect.value !== 'custom' && elements.clothesCustom.value.trim()) {
         extraDetails.push(elements.clothesCustom.value.trim());
@@ -365,7 +405,10 @@ document.addEventListener('DOMContentLoaded', () => {
         extraDetails.push(`[url=${elements.clothesLinkInput.value.trim()}]фото[/url]`);
       }
 
-      clothesVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
+      clothesVal = clothesParts.join(', ');
+      if (extraDetails.length > 0) {
+        clothesVal += ` [${extraDetails.join(', ')}]`;
+      }
     }
 
     let toyVal = '–';
