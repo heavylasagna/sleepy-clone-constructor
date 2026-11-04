@@ -27,7 +27,7 @@ body {
 }
 
 .app-container {
-  max-width: 1280px;
+  max-width: 1400px;
   margin: 0 auto;
 }
 
@@ -48,7 +48,7 @@ body {
   font-size: 1rem;
 }
 
-/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: СУЖЕННЫЙ САЙДБАР И РАСШИРЕННЫЙ КОНТЕНТ */
+/* ДВУХКОЛОНОЧНЫЙ МАКЕТ: ШИРОКОЕ ПРЕВЬЮ СЛЕВА И УЗКАЯ ФОРМА СПРАВА */
 .constructor-workspace {
   display: grid;
   grid-template-columns: 1fr;
@@ -57,7 +57,8 @@ body {
 
 @media (min-width: 900px) {
   .constructor-workspace {
-    grid-template-columns: 320px 1fr;
+    /* Левая колонка шире под превью, правая уже (примерно 1 к 2) */
+    grid-template-columns: 460px minmax(0, 1fr);
     align-items: start;
   }
 }
@@ -95,11 +96,11 @@ body {
   margin-bottom: 16px;
 }
 
-/* Превью с увеличенной высотой */
+/* Превью с увеличенной высотой под широкий сайдбар */
 .art-preview-box {
   width: 100%;
-  min-height: 480px;
-  max-height: 600px;
+  min-height: 540px;
+  max-height: 700px;
   overflow: hidden;
   border-radius: 12px;
   border: 1px dashed var(--primary);
