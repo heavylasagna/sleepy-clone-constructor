@@ -39,11 +39,13 @@ document.addEventListener('DOMContentLoaded', () => {
     clothesSelect: document.getElementById('clothes-select'),
     paciCheck: document.getElementById('paci-check'),
     clothesCustom: document.getElementById('clothes-custom-text'),
-    clothesLinkInput: document.getElementById('clothes-link-input'),
+    clothesLinksContainer: document.getElementById('clothes-links-container'),
+    btnAddClothesLink: document.getElementById('btn-add-clothes-link'),
 
     toySelect: document.getElementById('toy-select'),
     toyCustom: document.getElementById('toy-custom-text'),
-    toyLinkInput: document.getElementById('toy-link-input'),
+    toyLinksContainer: document.getElementById('toy-links-container'),
+    btnAddToyLink: document.getElementById('btn-add-toy-link'),
 
     linkColor: document.getElementById('link-color'),
     linkRef: document.getElementById('link-ref'),
@@ -72,8 +74,8 @@ document.addEventListener('DOMContentLoaded', () => {
     btnCopy: document.getElementById('btn-copy'),
     btnReset: document.getElementById('btn-reset'),
     toast: document.getElementById('toast'),
+    totalPriceEl: document.getElementById('total-price'),
 
-    // Слои превью
     layerBg: document.getElementById('layer-bg'),
     layerBase: document.getElementById('layer-base'),
     layerLashes: document.getElementById('layer-lashes'),
@@ -96,8 +98,129 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'sleepy_clone_constructor_data';
 
-  // Функция сохранения в localStorage
+  // Функция добавления строки ссылки
+  function addLinkRow(container, urlVal = '', labelVal = 'фото') {
+    const row = document.createElement('div');
+    row.className = 'link-row';
+    row.innerHTML = `
+      <input type="url" class="link-url-input" placeholder="Ссылка на изображение" value="${urlVal}">
+      <input type="text" class="link-label-input" placeholder="Текст" value="${labelVal}" style="width: 100px;">
+      <button type="button" class="btn-remove-link">−</button>
+    `;
+
+    row.querySelector('.btn-remove-link').addEventListener('click', () => {
+      row.remove();
+      updateVisibility();
+      updatePreviewLayers();
+      generateBBCode();
+      saveState();
+    });
+
+    row.querySelectorAll('input').forEach(input => {
+      input.addEventListener('input', () => {
+        generateBBCode();
+        saveState();
+      });
+    });
+
+    container.appendChild(row);
+  }
+
+  elements.btnAddClothesLink.addEventListener('click', () => {
+    addLinkRow(elements.clothesLinksContainer, '', 'фото');
+    saveState();
+  });
+
+  elements.btnAddToyLink.addEventListener('click', () => {
+    addLinkRow(elements.toyLinksContainer, '', 'фото');
+    saveState();
+  });
+
+  function calculateTotal() {
+    let totalKrol = 1200;
+    let totalRub = 400;
+
+    document.querySelectorAll('.pricing-item').forEach(item => {
+      const checkbox = item.querySelector('.price-check');
+      if (checkbox && checkbox.checked) {
+        const krol = parseInt(checkbox.getAttribute('data-krol')) || 0;
+        const rub = parseInt(checkbox.getAttribute('data-rub')) || 0;
+        
+        const counter = item.querySelector('.price-counter');
+        let qty = 1;
+        if (counter && !counter.classList.contains('hidden')) {
+          const qtyInput = counter.querySelector('.price-qty');
+          qty = parseInt(qtyInput.value) || 1;
+        }
+
+        totalKrol += krol * qty;
+        totalRub += rub * qty;
+      }
+    });
+
+    elements.totalPriceEl.textContent = `${totalKrol} кролей / ${totalRub} рублей`;
+  }
+
+  document.querySelectorAll('.pricing-item.scalable').forEach(item => {
+    const checkbox = item.querySelector('.price-check');
+    const counter = item.querySelector('.price-counter');
+    const qtyInput = item.querySelector('.price-qty');
+
+    checkbox.addEventListener('change', () => {
+      counter.classList.toggle('hidden', !checkbox.checked);
+      calculateTotal();
+      saveState();
+    });
+
+    qtyInput.addEventListener('input', () => {
+      calculateTotal();
+      saveState();
+    });
+  });
+
+  document.querySelectorAll('.pricing-item:not(.scalable) .price-check').forEach(checkbox => {
+    checkbox.addEventListener('change', () => {
+      calculateTotal();
+      saveState();
+    });
+  });
+
+  function getLinksString(container) {
+    const rows = container.querySelectorAll('.link-row');
+    const links = [];
+    rows.forEach(row => {
+      const url = row.querySelector('.link-url-input').value.trim();
+      const label = row.querySelector('.link-label-input').value.trim() || 'фото';
+      if (url) {
+        links.push(`[url=${url}]${label}[/url]`);
+      }
+    });
+    return links.join(', ');
+  }
+
   function saveState() {
+    const pricingData = [];
+    document.querySelectorAll('.pricing-item').forEach(item => {
+      const checkbox = item.querySelector('.price-check');
+      const qtyInput = item.querySelector('.price-qty');
+      pricingData.push({
+        checked: checkbox ? checkbox.checked : false,
+        qty: qtyInput ? qtyInput.value : 1
+      });
+    });
+
+    const serializeLinks = (container) => {
+      const rows = container.querySelectorAll('.link-row');
+      const data = [];
+      rows.forEach(r => {
+        data.push({
+          url: r.querySelector('.link-url-input').value,
+          label: r.querySelector('.link-label-input').value
+        });
+      });
+      return data;
+    };
+
     const data = {
       eyelashes: document.querySelector('input[name="eyelashes"]:checked')?.value || '–',
       blushSelect: elements.blushSelect.value,
@@ -124,10 +247,10 @@ document.addEventListener('DOMContentLoaded', () => {
       clothesSelect: elements.clothesSelect.value,
       paciCheck: elements.paciCheck.checked,
       clothesCustom: elements.clothesCustom.value,
-      clothesLinkInput: elements.clothesLinkInput.value,
+      clothesLinks: serializeLinks(elements.clothesLinksContainer),
       toySelect: elements.toySelect.value,
       toyCustom: elements.toyCustom.value,
-      toyLinkInput: elements.toyLinkInput.value,
+      toyLinks: serializeLinks(elements.toyLinksContainer),
       linkColor: elements.linkColor.value,
       linkRef: elements.linkRef.value,
       linkArt: elements.linkArt.value,
@@ -143,12 +266,12 @@ document.addEventListener('DOMContentLoaded', () => {
       paySelect: elements.paySelect.value,
       payProofLink: elements.payProofLink.value,
       socialSelect: elements.socialSelect.value,
-      socialLink: elements.socialLink.value
+      socialLink: elements.socialLink.value,
+      pricingData: pricingData
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
   }
 
-  // Функция загрузки из localStorage
   function loadState() {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (!saved) return;
@@ -183,10 +306,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.clothesSelect) elements.clothesSelect.value = data.clothesSelect;
       if (data.paciCheck !== undefined) elements.paciCheck.checked = data.paciCheck;
       if (data.clothesCustom) elements.clothesCustom.value = data.clothesCustom;
-      if (data.clothesLinkInput) elements.clothesLinkInput.value = data.clothesLinkInput;
+      
+      if (data.clothesLinks && data.clothesLinks.length > 0) {
+        elements.clothesLinksContainer.innerHTML = '';
+        data.clothesLinks.forEach(l => addLinkRow(elements.clothesLinksContainer, l.url, l.label));
+      }
+
       if (data.toySelect) elements.toySelect.value = data.toySelect;
       if (data.toyCustom) elements.toyCustom.value = data.toyCustom;
-      if (data.toyLinkInput) elements.toyLinkInput.value = data.toyLinkInput;
+
+      if (data.toyLinks && data.toyLinks.length > 0) {
+        elements.toyLinksContainer.innerHTML = '';
+        data.toyLinks.forEach(l => addLinkRow(elements.toyLinksContainer, l.url, l.label));
+      }
+
       if (data.linkColor) elements.linkColor.value = data.linkColor;
       if (data.linkRef) elements.linkRef.value = data.linkRef;
       if (data.linkArt) elements.linkArt.value = data.linkArt;
@@ -203,12 +336,27 @@ document.addEventListener('DOMContentLoaded', () => {
       if (data.payProofLink) elements.payProofLink.value = data.payProofLink;
       if (data.socialSelect) elements.socialSelect.value = data.socialSelect;
       if (data.socialLink) elements.socialLink.value = data.socialLink;
+
+      if (data.pricingData && Array.isArray(data.pricingData)) {
+        const pricingItems = document.querySelectorAll('.pricing-item');
+        data.pricingData.forEach((pData, index) => {
+          if (pricingItems[index]) {
+            const cb = pricingItems[index].querySelector('.price-check');
+            const qty = pricingItems[index].querySelector('.price-qty');
+            const counter = pricingItems[index].querySelector('.price-counter');
+            if (cb) {
+              cb.checked = pData.checked;
+              if (counter) counter.classList.toggle('hidden', !pData.checked);
+            }
+            if (qty) qty.value = pData.qty;
+          }
+        });
+      }
     } catch (e) {
       console.error('Ошибка загрузки сохраненных данных', e);
     }
   }
 
-  // Сброс настроек
   elements.btnReset.addEventListener('click', () => {
     if (confirm('Сбросить все настройки конструктора?')) {
       localStorage.removeItem(STORAGE_KEY);
@@ -248,13 +396,13 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.furSelect.value = '–';
     }
 
-    const isльникClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
-    elements.clothesCustom.classList.toggle('hidden', !isльникClothesSelected);
-    elements.clothesLinkInput.classList.toggle('hidden', !isльникClothesSelected);
+    const isClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
+    elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
+    elements.clothesLinksContainer.classList.toggle('hidden', !isClothesSelected);
 
     const isToySelected = elements.toySelect.value !== '–';
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
-    elements.toyLinkInput.classList.toggle('hidden', !isToySelected);
+    elements.toyLinksContainer.classList.toggle('hidden', !isToySelected);
 
     elements.outlineColorWrap.classList.toggle('hidden', !elements.outlineColored.checked);
 
@@ -414,18 +562,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   document.querySelectorAll('input, select, textarea').forEach(item => {
-    item.addEventListener('input', () => {
-      updateVisibility();
-      updatePreviewLayers();
-      generateBBCode();
-      saveState();
-    });
-    item.addEventListener('change', () => {
-      updateVisibility();
-      updatePreviewLayers();
-      generateBBCode();
-      saveState();
-    });
+    if (!item.classList.contains('link-url-input') && !item.classList.contains('link-label-input')) {
+      item.addEventListener('input', () => {
+        updateVisibility();
+        updatePreviewLayers();
+        generateBBCode();
+        saveState();
+      });
+      item.addEventListener('change', () => {
+        updateVisibility();
+        updatePreviewLayers();
+        generateBBCode();
+        saveState();
+      });
+    }
   });
 
   function generateBBCode() {
@@ -522,8 +672,9 @@ document.addEventListener('DOMContentLoaded', () => {
       if (elements.clothesSelect.value !== 'custom' && elements.clothesCustom.value.trim()) {
         extraDetails.push(elements.clothesCustom.value.trim());
       }
-      if (elements.clothesLinkInput.value.trim()) {
-        extraDetails.push(`[url=${elements.clothesLinkInput.value.trim()}]фото[/url]`);
+      const clothesLinksStr = getLinksString(elements.clothesLinksContainer);
+      if (clothesLinksStr) {
+        extraDetails.push(clothesLinksStr);
       }
 
       clothesVal = clothesParts.join(', ');
@@ -543,8 +694,9 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.toySelect.value !== 'custom' && elements.toyCustom.value.trim()) {
       toyExtra.push(elements.toyCustom.value.trim());
     }
-    if (elements.toyLinkInput.value.trim()) {
-      toyExtra.push(`[url=${elements.toyLinkInput.value.trim()}]фото[/url]`);
+    const toyLinksStr = getLinksString(elements.toyLinksContainer);
+    if (toyLinksStr) {
+      toyExtra.push(toyLinksStr);
     }
     if (toyVal !== '–' && toyExtra.length > 0) {
       toyVal += ` [${toyExtra.join(', ')}]`;
@@ -612,9 +764,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Инициализация при загрузке
   loadState();
+  if (elements.clothesLinksContainer.children.length === 0) {
+    addLinkRow(elements.clothesLinksContainer, '', 'фото');
+  }
+  if (elements.toyLinksContainer.children.length === 0) {
+    addLinkRow(elements.toyLinksContainer, '', 'фото');
+  }
   updateVisibility();
   updatePreviewLayers();
+  calculateTotal();
   generateBBCode();
 });
