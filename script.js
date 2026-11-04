@@ -71,6 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // Слои превью
     layerBg: document.getElementById('layer-bg'),
     layerBase: document.getElementById('layer-base'),
+    layerLashes: document.getElementById('layer-lashes'),
     layerEars: document.getElementById('layer-ears'),
     layerEartufts: document.getElementById('layer-eartufts'),
     layerCheeks: document.getElementById('layer-cheeks'),
@@ -123,13 +124,25 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.socialLink.classList.toggle('hidden', isLSPos);
   }
 
-  // Обновление картинок на превью с учетом base.png и остальных слоев
+  // Обновление слоев превью с учетом lashes.png
   function updatePreviewLayers() {
     elements.layerBg.src = "images/background.png";
     elements.layerBg.style.display = 'block';
 
     elements.layerBase.src = "images/base.png";
     elements.layerBase.style.display = 'block';
+
+    // Ресницы
+    let showLashes = false;
+    elements.eyelashes.forEach(r => {
+      if (r.checked && r.value === 'Да') showLashes = true;
+    });
+    if (showLashes) {
+      elements.layerLashes.src = "images/lashes.png";
+      elements.layerLashes.style.display = 'block';
+    } else {
+      elements.layerLashes.style.display = 'none';
+    }
 
     // Уши
     const earVal = elements.earsNum.value;
