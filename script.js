@@ -108,6 +108,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const bgVal = elements.bgSelect.value;
     elements.bgColorPickerWrap.classList.toggle('hidden', bgVal !== 'Однотонный');
     elements.bgCustomText.classList.toggle('hidden', bgVal !== 'Другие цвета' && bgVal !== 'Другие элементы на фоне');
+
+    // Соцсеть "ЛС Вара" скрывает поле ввода ссылки
+    const isLSPos = elements.socialSelect.value === 'ЛС Вара';
+    elements.socialLink.classList.toggle('hidden', isLSPos);
   }
 
   // Привязка слушателей для обновления видимости и рендеринга кода
@@ -124,10 +128,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Главная функция сборки BB-Кода
   function generateBBCode() {
-    // 1. Ссылки персонажа
-    const linkColorVal = elements.linkColor.value.trim() ? `[url=${elements.linkColor.value.trim()}]Окрас[/url]` : 'Окрас';
-    const linkRefVal = elements.linkRef.value.trim() ? `[url=${elements.linkRef.value.trim()}]Референс[/url]` : 'Референс';
-    const linkArtVal = elements.linkArt.value.trim() ? `[url=${elements.linkArt.value.trim()}]Арт[/url]` : 'Арт';
+    // 1. Ссылки персонажа (убираем пункт, если ссылка не вставлена)
+    const linksArr = [];
+    const colorVal = elements.linkColor.value.trim();
+    const refVal = elements.linkRef.value.trim();
+    const artVal = elements.linkArt.value.trim();
+
+    if (colorVal) linksArr.push(`[url=${colorVal}]Окрас[/url]`);
+    if (refVal) linksArr.push(`[url=${refVal}]Референс[/url]`);
+    if (artVal) linksArr.push(`[url=${artVal}]Арт[/url]`);
+
+    const finalLinksStr = linksArr.length > 0 ? linksArr.join(', ') : '–';
 
     // Ресницы
     let lashVal = '–';
@@ -229,12 +240,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Соцсеть
-    const socialVal = elements.socialLink.value.trim() 
-      ? `${elements.socialSelect.value} (${elements.socialLink.value.trim()})`
-      : elements.socialSelect.value;
+    let socialVal = elements.socialSelect.value;
+    if (socialVal !== 'ЛС Вара' && elements.socialLink.value.trim()) {
+      socialVal += ` (${elements.socialLink.value.trim()})`;
+    }
 
     // Сборка Шаблона
-    const bbcode = `[code][b]1.[/b] ${linkColorVal}, ${linkRefVal}, ${linkArtVal}
+    const bbcode = `[code][b]1.[/b] ${finalLinksStr}
 [b]2.[/b] ${elements.charNotes.value.trim() || '–'}
 [b]3.[/b] [header=детали]Детали[/header]
 [block=детали][b]Ресницы:[/b] ${lashVal}
