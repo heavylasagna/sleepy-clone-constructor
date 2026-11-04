@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const STORAGE_KEY = 'sleepy_clone_constructor_data';
 
-  // Функция добавления строки вложения
-  function addLinkRow(container, urlVal = '', labelVal = 'Текст') {
+  // Функция добавления строки вложения (поле текста изначально пустое, плейсхолдер "Текст")
+  function addLinkRow(container, urlVal = '', labelVal = '') {
     const row = document.createElement('div');
     row.className = 'link-row';
     row.innerHTML = `
@@ -132,13 +132,13 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   elements.btnAddClothesLink.addEventListener('click', () => {
-    addLinkRow(elements.clothesLinksContainer, '', 'Текст');
+    addLinkRow(elements.clothesLinksContainer, '', '');
     generateBBCode();
     saveState();
   });
 
   elements.btnAddToyLink.addEventListener('click', () => {
-    addLinkRow(elements.toyLinksContainer, '', 'Текст');
+    addLinkRow(elements.toyLinksContainer, '', '');
     generateBBCode();
     saveState();
   });
@@ -446,7 +446,6 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updatePreviewLayers() {
-    // 1. Управление фоном
     const bgVal = elements.bgSelect.value;
     if (bgVal === 'Прозрачный') {
       elements.layerBg.style.display = 'none';
@@ -535,7 +534,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerFringe.style.display = 'none';
     }
 
-    // Обработка шерсти (чекбоксы)
     if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') {
       elements.layerFurBody.src = "images/bodyfur.png";
       elements.layerFurBody.style.display = 'block';
@@ -604,7 +602,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerCheeks.style.display = 'none';
     }
 
-    // Освещение (скрывается при прозрачном фоне)
     const timeVal = elements.timeSelect.value;
     if (timeVal !== '–' && bgVal !== 'Прозрачный') {
       elements.layerLight.src = `images/${timeVal}`;
@@ -681,7 +678,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const bangsVal = elements.bangsSelect.value !== '–' ? getDigitOnly(elements.bangsSelect) : '–';
     const maneVal = getDigitOnly(elements.maneSelect, elements.maneCustom);
     
-    // Сборка выбранной шерсти
     let furParts = [];
     if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') furParts.push('На теле');
     if (elements.furPawCheck.checked && elements.optPawfurWrap.style.display !== 'none') furParts.push('На лапах');
@@ -807,7 +803,21 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.output.value = bbcode;
   }
 
-  elements.btnCopy.addEventListener('click', () => {
+  // Проверка обязательных полей перед копированием
+  elements.btnCopy.addEventListener('click', (e) => {
+    // Список обязательных для выбора селектов (где значение не должно равняться '–' / 'Не выбрано')
+    const requiredSelects = [
+      { el: elements.earsNum, name: 'Уши' }
+    ];
+
+    for (let item of requiredSelects) {
+      if (item.el.value === '–') {
+        alert(`Пожалуйста, выберите значение в обязательном поле: "${item.name}"`);
+        item.el.focus();
+        return;
+      }
+    }
+
     elements.output.select();
     navigator.clipboard.writeText(elements.output.value).then(() => {
       elements.toast.classList.add('show');
