@@ -112,7 +112,6 @@
                   <option value="ears4.png">4. Вислоухие</option>
                   <option value="ears5.png">5. Раскосые</option>
                   <option value="ears6.png">6. Завёрнутые</option>
-                  <option value="ears7.png">7. Круглые</option>
                   <option value="custom">Свой вариант</option>
                 </select>
               </div>
@@ -189,9 +188,9 @@
               <label class="group-title">Шерсть</label>
               <select id="fur-select" class="styled-select">
                 <option value="–">Нет</option>
-                <option id="opt-bodyfur" value="bodyfur.png">На теле</option>
-                <option id="opt-pawfur" value="pawfur.png">На лапах</option>
-                <option value="earfur">На ушах</option>
+                <option id="opt-bodyfur" value="bodyfur.png">Шерсть на теле</option>
+                <option id="opt-pawfur" value="pawfur.png">Шерсть на лапах</option>
+                <option value="earfur">Шерсть на ушах</option>
                 <option value="custom">Свой вариант</option>
               </select>
               <input type="text" id="fur-custom-text" class="custom-input hidden" placeholder="Опишите вариант шерсти...">
@@ -250,7 +249,7 @@
               </select>
               
               <div style="margin-top: 10px;">
-                <label><input type="checkbox" id="paci-check"> <span>Добавить соску (paci.png)</span></label>
+                <label><input type="checkbox" id="paci-check"> <span>Соска (paci.png)</span></label>
               </div>
 
               <input type="text" id="clothes-custom-text" class="custom-input hidden" placeholder="Опишите цвет, узор или свой вариант одежды...">
@@ -359,10 +358,15 @@
               <select id="social-select" class="styled-select">
                 <option value="ВК">ВК</option>
                 <option value="ТГ">ТГ</option>
-                <option value="ЛС Вара">ЛС Вара</option>
+                <option value="ЛС Вара" selected>ЛС Вара</option>
               </select>
-              <input type="text" id="social-link" placeholder="Ссылка или логин (@username)">
+              <input type="text" id="social-link" class="hidden" placeholder="Ссылка или логин (@username)">
             </div>
+          </div>
+
+          <!-- Кнопка сброса настроек в самом низу -->
+          <div class="input-field" style="margin-top: 24px; text-align: center;">
+            <button id="btn-reset" type="button" style="background: #e74c3c; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; width: 100%;">Сбросить настройки</button>
           </div>
         </section>
 
