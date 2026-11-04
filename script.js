@@ -76,20 +76,20 @@ document.addEventListener('DOMContentLoaded', () => {
     layerBg: document.getElementById('layer-bg'),
     layerBase: document.getElementById('layer-base'),
     layerLashes: document.getElementById('layer-lashes'),
+    layerToy: document.getElementById('layer-toy'),
+    layerMane: document.getElementById('layer-mane'),
     layerEars: document.getElementById('layer-ears'),
     layerEarfur: document.getElementById('layer-earfur'),
     layerEartufts: document.getElementById('layer-eartufts'),
-    layerCheeks: document.getElementById('layer-cheeks'),
     layerTuft: document.getElementById('layer-tuft'),
     layerFringe: document.getElementById('layer-fringe'),
-    layerMane: document.getElementById('layer-mane'),
     layerFur: document.getElementById('layer-fur'),
     layerTail: document.getElementById('layer-tail'),
     layerWhiskers: document.getElementById('layer-whiskers'),
     layerBlush: document.getElementById('layer-blush'),
     layerClothes: document.getElementById('layer-clothes'),
     layerPaci: document.getElementById('layer-paci'),
-    layerToy: document.getElementById('layer-toy'),
+    layerCheeks: document.getElementById('layer-cheeks'),
     layerLight: document.getElementById('layer-light')
   };
 
@@ -125,9 +125,9 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.furSelect.value = '–';
     }
 
-    const isльникClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
-    elements.clothesCustom.classList.toggle('hidden', !isльникClothesSelected);
-    elements.clothesLinkInput.classList.toggle('hidden', !isльникClothesSelected);
+    const isClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
+    elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
+    elements.clothesLinkInput.classList.toggle('hidden', !isClothesSelected);
 
     const isToySelected = elements.toySelect.value !== '–';
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
@@ -147,6 +147,15 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.layerBg.src = "images/background.png";
     elements.layerBg.style.display = 'block';
 
+    // Игрушка между фоном и базой
+    const toyVal = elements.toySelect.value;
+    if (toyVal !== '–' && toyVal !== 'custom') {
+      elements.layerToy.src = `images/${toyVal}`;
+      elements.layerToy.style.display = 'block';
+    } else {
+      elements.layerToy.style.display = 'none';
+    }
+
     elements.layerBase.src = "images/base.png";
     elements.layerBase.style.display = 'block';
 
@@ -160,6 +169,15 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerLashes.style.display = 'block';
     } else {
       elements.layerLashes.style.display = 'none';
+    }
+
+    // Грива
+    const maneVal = elements.maneSelect.value;
+    if (maneVal !== '–' && maneVal !== 'custom') {
+      elements.layerMane.src = `images/${maneVal}`;
+      elements.layerMane.style.display = 'block';
+    } else {
+      elements.layerMane.style.display = 'none';
     }
 
     // Уши
@@ -190,15 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerEartufts.style.display = 'none';
     }
 
-    // Щёки
-    const cheeksVal = elements.cheeksSelect.value;
-    if (cheeksVal !== '–' && cheeksVal !== 'custom') {
-      elements.layerCheeks.src = `images/${cheeksVal}`;
-      elements.layerCheeks.style.display = 'block';
-    } else {
-      elements.layerCheeks.style.display = 'none';
-    }
-
     // Хохолок
     const tuftVal = elements.tuftSelect.value;
     if (tuftVal !== '–' && tuftVal !== 'custom') {
@@ -215,15 +224,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerFringe.style.display = 'block';
     } else {
       elements.layerFringe.style.display = 'none';
-    }
-
-    // Грива
-    const maneVal = elements.maneSelect.value;
-    if (maneVal !== '–' && maneVal !== 'custom') {
-      elements.layerMane.src = `images/${maneVal}`;
-      elements.layerMane.style.display = 'block';
-    } else {
-      elements.layerMane.style.display = 'none';
     }
 
     // Шерсть
@@ -285,13 +285,13 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerPaci.style.display = 'none';
     }
 
-    // Игрушка
-    const toyVal = elements.toySelect.value;
-    if (toyVal !== '–' && toyVal !== 'custom') {
-      elements.layerToy.src = `images/${toyVal}`;
-      elements.layerToy.style.display = 'block';
+    // Щёки
+    const cheeksVal = elements.cheeksSelect.value;
+    if (cheeksVal !== '–' && cheeksVal !== 'custom') {
+      elements.layerCheeks.src = `images/${cheeksVal}`;
+      elements.layerCheeks.style.display = 'block';
     } else {
-      elements.layerToy.style.display = 'none';
+      elements.layerCheeks.style.display = 'none';
     }
 
     // Освещение
@@ -332,65 +332,74 @@ document.addEventListener('DOMContentLoaded', () => {
     let lashVal = '–';
     elements.eyelashes.forEach(r => { if (r.checked) lashVal = r.value; });
 
+    // Функция извлечения цифры для анкеты
+    const getNumVal = (selectEl, customEl) => {
+      if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
+      if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
+        return selectEl.options[selectEl.selectedIndex].text;
+      }
+      return '–';
+    };
+
     let blushVal = '–';
     if (elements.blushSelect.value === 'custom') {
       blushVal = elements.blushCustom.value.trim() || 'Свой вариант';
     } else if (elements.blushSelect.value !== '–') {
-      const blushName = elements.blushSelect.options[elements.blushSelect.selectedIndex].text;
-      blushVal = `${blushName} [${elements.blushColor.value}]`;
+      const blushNum = elements.blushSelect.options[elements.blushSelect.selectedIndex].text;
+      blushVal = `${blushNum} [${elements.blushColor.value}]`;
     }
 
     let earsVal = '–';
     if (elements.earsNum.value === 'custom') {
       earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
     } else if (elements.earsNum.value !== '–') {
-      const earName = elements.earsNum.options[elements.earsNum.selectedIndex].text;
+      const earNum = elements.earsNum.options[elements.earsNum.selectedIndex].text;
       let earAddons = [];
       if (elements.earFurCheck.checked) earAddons.push('шерсть в ушах');
       if (elements.earTuftsCheck.checked) earAddons.push('кисточки');
       
-      earsVal = earAddons.length > 0 ? `${earName} [${earAddons.join(', ')}]` : earName;
+      earsVal = earAddons.length > 0 ? `${earNum} [${earAddons.join(', ')}]` : earNum;
     }
 
-    const getSimpleVal = (selectEl, customEl) => {
-      if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
-      if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
-        return selectEl.options[selectEl.selectedIndex].text;
-      }
-      return selectEl.value;
-    };
-
-    const cheeksVal = getSimpleVal(elements.cheeksSelect, elements.cheeksCustom);
-    const tuftVal = getSimpleVal(elements.tuftSelect, elements.tuftCustom);
+    const cheeksVal = getNumVal(elements.cheeksSelect, elements.cheeksCustom);
+    const tuftVal = getNumVal(elements.tuftSelect, elements.tuftCustom);
     const bangsVal = elements.bangsSelect.value !== '–' ? elements.bangsSelect.options[elements.bangsSelect.selectedIndex].text : '–';
-    const maneVal = getSimpleVal(elements.maneSelect, elements.maneCustom);
+    const maneVal = getNumVal(elements.maneSelect, elements.maneCustom);
     
     let furVal = '–';
     if (elements.furSelect.value === 'custom') {
       furVal = elements.furCustom.value.trim() || 'Свой вариант';
     } else if (elements.furSelect.value === 'earfur') {
       furVal = 'На ушах';
-    } else if (elements.furSelect.value !== '–') {
-      furVal = elements.furSelect.options[elements.furSelect.selectedIndex].text;
+    } else if (elements.furSelect.value === 'bodyfur.png') {
+      furVal = 'На теле';
+    } else if (elements.furSelect.value === 'pawfur.png') {
+      furVal = 'На лапах';
     }
 
-    const tailVal = getSimpleVal(elements.tailSelect, elements.tailCustom);
+    const tailVal = getNumVal(elements.tailSelect, elements.tailCustom);
 
     let whiskersVal = '–';
     if (elements.whiskersSelect.value === 'custom') {
       whiskersVal = elements.whiskersCustom.value.trim() || 'Свой вариант';
     } else if (elements.whiskersSelect.value !== '–') {
-      const whiskName = elements.whiskersSelect.options[elements.whiskersSelect.selectedIndex].text;
-      whiskersVal = `${whiskName} [${elements.whiskersColor.value}]`;
+      const whiskNum = elements.whiskersSelect.options[elements.whiskersSelect.selectedIndex].text;
+      whiskersVal = `${whiskNum} [${elements.whiskersColor.value}]`;
     }
 
     let clothesParts = [];
-    if (elements.clothesSelect.value !== '–') {
-      const baseName = elements.clothesSelect.value === 'custom' 
-        ? (elements.clothesCustom.value.trim() || 'Свой вариант')
-        : elements.clothesSelect.options[elements.clothesSelect.selectedIndex].text;
-      clothesParts.push(baseName);
+    if (elements.clothesSelect.value === 'nappy.png') {
+      clothesParts.push('Подгузник');
+    } else if (elements.clothesSelect.value === 'slip1.png') {
+      clothesParts.push('Закрытый слип');
+    } else if (elements.clothesSelect.value === 'slip2.png') {
+      clothesParts.push('Слип с рукавами');
+    } else if (elements.clothesSelect.value === 'slip3.png') {
+      clothesParts.push('Слип без рукавов');
+    } else if (elements.clothesSelect.value === 'custom') {
+      clothesParts.push(elements.clothesCustom.value.trim() || 'Свой вариант');
     }
+
     if (elements.paciCheck.checked) {
       clothesParts.push('Соска');
     }
@@ -412,20 +421,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     let toyVal = '–';
-    if (elements.toySelect.value !== '–') {
-      const baseName = elements.toySelect.value === 'custom'
-        ? (elements.toyCustom.value.trim() || 'Свой вариант')
-        : elements.toySelect.options[elements.toySelect.selectedIndex].text;
+    if (elements.toySelect.value === 'custom') {
+      toyVal = elements.toyCustom.value.trim() || 'Свой вариант / Свой цвет';
+    } else if (elements.toySelect.value !== '–') {
+      toyVal = elements.toySelect.options[elements.toySelect.selectedIndex].text;
+    }
 
-      let extraDetails = [];
-      if (elements.toySelect.value !== 'custom' && elements.toyCustom.value.trim()) {
-        extraDetails.push(elements.toyCustom.value.trim());
-      }
-      if (elements.toyLinkInput.value.trim()) {
-        extraDetails.push(`[url=${elements.toyLinkInput.value.trim()}]фото[/url]`);
-      }
-
-      toyVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
+    let toyExtra = [];
+    if (elements.toySelect.value !== 'custom' && elements.toyCustom.value.trim()) {
+      toyExtra.push(elements.toyCustom.value.trim());
+    }
+    if (elements.toyLinkInput.value.trim()) {
+      toyExtra.push(`[url=${elements.toyLinkInput.value.trim()}]фото[/url]`);
+    }
+    if (toyVal !== '–' && toyExtra.length > 0) {
+      toyVal += ` [${toyExtra.join(', ')}]`;
     }
 
     let outlineParts = [];
