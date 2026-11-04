@@ -40,7 +40,10 @@
             <img id="layer-tuft" class="art-layer" src="" alt="" style="display:none;">
             <img id="layer-fringe" class="art-layer" src="" alt="" style="display:none;">
             
-            <img id="layer-fur" class="art-layer" src="" alt="" style="display:none;">
+            <img id="layer-fur-body" class="art-layer" src="" alt="" style="display:none;">
+            <img id="layer-fur-paw" class="art-layer" src="" alt="" style="display:none;">
+            <img id="layer-fur-ear" class="art-layer" src="" alt="" style="display:none;">
+            
             <img id="layer-tail" class="art-layer" src="" alt="" style="display:none;">
             <img id="layer-whiskers" class="art-layer" src="" alt="" style="display:none;">
             <img id="layer-blush" class="art-layer" src="" alt="" style="display:none;">
@@ -80,6 +83,14 @@
                 </div>
               </label>
 
+              <label class="pricing-item">
+                <input type="checkbox" class="price-check" data-krol="0" data-rub="0">
+                <div class="price-info">
+                  <span class="price-title">Однотонный/Прозрачный фон</span>
+                  <span class="price-free">Бесплатно</span>
+                </div>
+              </label>
+
               <div class="pricing-item scalable">
                 <label class="pricing-main-label">
                   <input type="checkbox" class="price-check" data-krol="30" data-rub="10">
@@ -91,7 +102,11 @@
                 </label>
                 <div class="price-counter hidden">
                   <span>Кол-во:</span>
-                  <input type="number" class="price-qty" min="1" value="1">
+                  <div class="custom-stepper">
+                    <button type="button" class="stepper-btn minus">−</button>
+                    <input type="text" class="price-qty" value="1" readonly>
+                    <button type="button" class="stepper-btn plus">+</button>
+                  </div>
                 </div>
               </div>
 
@@ -106,7 +121,11 @@
                 </label>
                 <div class="price-counter hidden">
                   <span>Кол-во:</span>
-                  <input type="number" class="price-qty" min="1" value="1">
+                  <div class="custom-stepper">
+                    <button type="button" class="stepper-btn minus">−</button>
+                    <input type="text" class="price-qty" value="1" readonly>
+                    <button type="button" class="stepper-btn plus">+</button>
+                  </div>
                 </div>
               </div>
 
@@ -121,7 +140,11 @@
                 </label>
                 <div class="price-counter hidden">
                   <span>Кол-во:</span>
-                  <input type="number" class="price-qty" min="1" value="1">
+                  <div class="custom-stepper">
+                    <button type="button" class="stepper-btn minus">−</button>
+                    <input type="text" class="price-qty" value="1" readonly>
+                    <button type="button" class="stepper-btn plus">+</button>
+                  </div>
                 </div>
               </div>
 
@@ -136,7 +159,11 @@
                 </label>
                 <div class="price-counter hidden">
                   <span>Кол-во:</span>
-                  <input type="number" class="price-qty" min="1" value="1">
+                  <div class="custom-stepper">
+                    <button type="button" class="stepper-btn minus">−</button>
+                    <input type="text" class="price-qty" value="1" readonly>
+                    <button type="button" class="stepper-btn plus">+</button>
+                  </div>
                 </div>
               </div>
 
@@ -158,7 +185,11 @@
                 </label>
                 <div class="price-counter hidden">
                   <span>Кол-во:</span>
-                  <input type="number" class="price-qty" min="1" value="1">
+                  <div class="custom-stepper">
+                    <button type="button" class="stepper-btn minus">−</button>
+                    <input type="text" class="price-qty" value="1" readonly>
+                    <button type="button" class="stepper-btn plus">+</button>
+                  </div>
                 </div>
               </div>
 
@@ -328,16 +359,15 @@
               <input type="text" id="mane-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант гривы...">
             </div>
 
-            <!-- Шерсть -->
+            <!-- Шерсть (Чекбоксы) -->
             <div class="option-group">
               <label class="group-title">Шерсть</label>
-              <select id="fur-select" class="styled-select">
-                <option value="–">Нет</option>
-                <option id="opt-bodyfur" value="bodyfur.png">Шерсть на теле</option>
-                <option id="opt-pawfur" value="pawfur.png">Шерсть на лапах</option>
-                <option value="earfur">Шерсть на ушах</option>
-                <option value="custom">Свой вариант</option>
-              </select>
+              <div class="inline-selects" style="flex-direction: column; align-items: flex-start; gap: 8px;">
+                <label id="opt-bodyfur-wrap"><input type="checkbox" id="fur-body-check" value="bodyfur.png"> <span>Шерсть на теле</span></label>
+                <label id="opt-pawfur-wrap"><input type="checkbox" id="fur-paw-check" value="pawfur.png"> <span>Шерсть на лапах</span></label>
+                <label><input type="checkbox" id="fur-ear-check" value="earfur"> <span>Шерсть на ушах</span></label>
+                <label><input type="checkbox" id="fur-custom-check" value="custom"> <span>Свой вариант</span></label>
+              </div>
               <input type="text" id="fur-custom-text" class="custom-input hidden" placeholder="Опишите вариант шерсти...">
             </div>
 
@@ -399,14 +429,8 @@
 
               <input type="text" id="clothes-custom-text" class="custom-input hidden" placeholder="Опишите цвет, узор или свой вариант одежды...">
               
-              <!-- Множественные ссылки для одежды -->
-              <div id="clothes-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
-                <div class="link-row">
-                  <input type="url" class="clothes-link-url" placeholder="Ссылка на изображение одежды">
-                  <input type="text" class="clothes-link-label" placeholder="Текст (напр. фото)" value="фото" style="width: 100px;">
-                  <button type="button" class="btn-add-link" id="btn-add-clothes-link" style="padding: 4px 10px; cursor: pointer;">+</button>
-                </div>
-              </div>
+              <div id="clothes-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;"></div>
+              <button type="button" class="btn-add-plus" id="btn-add-clothes-link" title="Добавить вложение">+</button>
             </div>
 
             <!-- Игрушка -->
@@ -424,14 +448,8 @@
               </select>
               <input type="text" id="toy-custom-text" class="custom-input hidden" placeholder="Опишите свою игрушку или цвет...">
               
-              <!-- Множественные ссылки для игрушки -->
-              <div id="toy-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;">
-                <div class="link-row">
-                  <input type="url" class="toy-link-url" placeholder="Ссылка на изображение игрушки">
-                  <input type="text" class="toy-link-label" placeholder="Текст (напр. фото)" value="фото" style="width: 100px;">
-                  <button type="button" class="btn-add-link" id="btn-add-toy-link" style="padding: 4px 10px; cursor: pointer;">+</button>
-                </div>
-              </div>
+              <div id="toy-links-container" class="hidden" style="margin-top: 8px; display: flex; flex-direction: column; gap: 6px;"></div>
+              <button type="button" class="btn-add-plus" id="btn-add-toy-link" title="Добавить вложение">+</button>
             </div>
 
           </div>
@@ -469,7 +487,7 @@
               <div class="inline-selects" style="margin-top: 8px;">
                 <label><input type="checkbox" id="outline-colored"> <span>Цветная</span></label>
                 <div id="outline-color-wrap" class="color-picker-wrap hidden">
-                  <input type="color" id="outline-color-picker" value="#000000">
+                  <input type="color" id="outline-color-picker" value="#ffffff">
                 </div>
               </div>
             </div>
@@ -495,7 +513,7 @@
             <div class="input-field">
               <label>7. Время суток / Освещение:</label>
               <select id="time-select" class="styled-select">
-                <option value="–">Не важно</option>
+                <option value="–">Нет</option>
                 <option value="light1.png">1. Утро</option>
                 <option value="light2.png">2. День</option>
                 <option value="light3.png">3. Вечер</option>
