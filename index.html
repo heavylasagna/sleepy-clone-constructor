@@ -3,196 +3,342 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Заказ Арта / Commission Art Order</title>
+  <title>Конструктор Заказа Персонажа</title>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@500;700&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 <body>
+
   <div class="app-container">
     <header class="app-header">
-      <div class="logo">
-        <span class="logo-icon">🎨</span>
-        <div>
-          <h1>Art Commission Studio</h1>
-          <p>Сконструируйте персонажа и сформируйте заявку</p>
-        </div>
-      </div>
+      <h1>🎨 Конструктор заказа рисунка</h1>
+      <p>Выберите нужные детали, укажите референсы и скопируйте готовый BB-код</p>
     </header>
 
-    <main class="app-grid">
-      <!-- 1. Конструктор слоев -->
+    <!-- СВЕРХУ: ИЗОБРАЖЕНИЕ-ПРИМЕР / ПРЕВЬЮ -->
+    <section class="card preview-card">
+      <h2>Превью / База</h2>
+      <div class="art-preview-box">
+        <img id="base-image" src="https://via.placeholder.com/800x400/e0f2fe/0369a1?text=Здесь+будет+ваша+основная+картинка-база" alt="База персонажа">
+      </div>
+    </section>
+
+    <main class="main-layout">
+      <!-- СЕКЦИЯ 1: ВЫБОР ДЕТАЛЕЙ ПЕРСОНАЖА -->
       <section class="card builder-card">
-        <h2>1. Визуальный конструктор</h2>
-        <div class="builder-layout">
-          <div class="canvas-wrapper">
-            <svg id="art-canvas" viewBox="0 0 500 500">
-              <rect class="canvas-bg" width="500" height="500" rx="16" />
-              <!-- Слои SVG (управляются через JS) -->
-              <g id="layer-bg"></g>
-              <g id="layer-body"></g>
-              <g id="layer-hair"></g>
-              <g id="layer-clothes"></g>
-              <g id="layer-expression"></g>
-              <g id="layer-effects"></g>
-            </svg>
-            <div class="canvas-hint">Превью вашего выбора</div>
-          </div>
+        <h2>1. Детали персонажа</h2>
 
-          <div class="controls-wrapper">
-            <div class="control-group">
-              <label>Тип корпуса / Поза (+0 ₽)</label>
-              <div class="options-grid" data-category="body">
-                <button class="opt-btn active" data-value="slim" data-price="0">Стройный</button>
-                <button class="opt-btn" data-value="chibi" data-price="0">Чиби</button>
-                <button class="opt-btn" data-value="heroic" data-price="0">Атлетичный</button>
-              </div>
-            </div>
+        <div class="form-grid">
 
-            <div class="control-group">
-              <label>Прическа (+200 ₽)</label>
-              <div class="options-grid" data-category="hair">
-                <button class="opt-btn active" data-value="short" data-price="200">Короткие</button>
-                <button class="opt-btn" data-value="long" data-price="200">Длинные</button>
-                <button class="opt-btn" data-value="ponytail" data-price="200">Хвост</button>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label>Эмоция / Лицо (+0 ₽)</label>
-              <div class="options-grid" data-category="expression">
-                <button class="opt-btn active" data-value="smile" data-price="0">Улыбка</button>
-                <button class="opt-btn" data-value="wink" data-price="0">Подмигивание</button>
-                <button class="opt-btn" data-value="serious" data-price="0">Серьезный</button>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label>Стиль одежды (+300 ₽)</label>
-              <div class="options-grid" data-category="clothes">
-                <button class="opt-btn active" data-value="casual" data-price="300">Кэжуал</button>
-                <button class="opt-btn" data-value="fantasy" data-price="300">Фэнтези</button>
-                <button class="opt-btn" data-value="cyber" data-price="300">Киберпанк</button>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label>Атмосфера фона (+400 ₽)</label>
-              <div class="options-grid" data-category="bg">
-                <button class="opt-btn active" data-value="simple" data-price="0">Простой цвет</button>
-                <button class="opt-btn" data-value="nature" data-price="400">Природа</button>
-                <button class="opt-btn" data-value="city" data-price="400">Город / Неон</button>
-              </div>
-            </div>
-
-            <div class="control-group">
-              <label>Спецэффекты (+150 ₽)</label>
-              <div class="options-grid" data-category="effects">
-                <button class="opt-btn active" data-value="none" data-price="0">Без эффектов</button>
-                <button class="opt-btn" data-value="sparkles" data-price="150">Магия / Блестки</button>
-                <button class="opt-btn" data-value="fire" data-price="150">Огонь / Энергия</button>
-              </div>
+          <!-- Ресницы -->
+          <div class="option-group">
+            <label class="group-title">Ресницы</label>
+            <div class="radio-buttons">
+              <label><input type="radio" name="eyelashes" value="Да"> <span>Да</span></label>
+              <label><input type="radio" name="eyelashes" value="–" checked> <span>Нет (–)</span></label>
             </div>
           </div>
+
+          <!-- Румянец -->
+          <div class="option-group">
+            <label class="group-title">Румянец</label>
+            <div class="inline-selects">
+              <select id="blush-select" class="styled-select">
+                <option value="–">Нет (–)</option>
+                <option value="1">№1</option>
+                <option value="2">№2</option>
+                <option value="3">№3</option>
+                <option value="4">№4</option>
+                <option value="custom">Свой вариант</option>
+              </select>
+              <div class="color-picker-wrap">
+                <label>Цвет:</label>
+                <input type="color" id="blush-color" value="#ffb3ba">
+              </div>
+            </div>
+            <input type="text" id="blush-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант румянца...">
+          </div>
+
+          <!-- Уши -->
+          <div class="option-group">
+            <label class="group-title">Уши</label>
+            <div class="inline-selects">
+              <select id="ears-num" class="styled-select">
+                <option value="–">Не выбрано</option>
+                <option value="1">№1</option>
+                <option value="2">№2</option>
+                <option value="3">№3</option>
+                <option value="4">№4</option>
+                <option value="5">№5</option>
+                <option value="6">№6</option>
+                <option value="7">№7</option>
+                <option value="custom">Свой вариант</option>
+              </select>
+              <select id="ears-type" class="styled-select">
+                <option value="С шерстью">С шерстью</option>
+                <option value="С кисточками">С кисточками</option>
+                <option value="Без ничего">Без ничего</option>
+              </select>
+            </div>
+            <input type="text" id="ears-custom-text" class="custom-input hidden" placeholder="Опишите свои уши...">
+          </div>
+
+          <!-- Щёки -->
+          <div class="option-group">
+            <label class="group-title">Щёки</label>
+            <select id="cheeks-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="1">№1</option>
+              <option value="2">№2</option>
+              <option value="3">№3</option>
+              <option value="4">№4</option>
+              <option value="5">№5</option>
+              <option value="6">№6</option>
+              <option value="7">№7</option>
+              <option value="8">№8</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="cheeks-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант щёк...">
+          </div>
+
+          <!-- Хохолок -->
+          <div class="option-group">
+            <label class="group-title">Хохолок</label>
+            <select id="tuft-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="1">№1</option>
+              <option value="2">№2</option>
+              <option value="3">№3</option>
+              <option value="4">№4</option>
+              <option value="5">№5</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="tuft-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант хохолка...">
+          </div>
+
+          <!-- Чёлка -->
+          <div class="option-group">
+            <label class="group-title">Чёлка</label>
+            <select id="bangs-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="1">№1</option>
+              <option value="2">№2</option>
+              <option value="3">№3</option>
+              <option value="4">№4</option>
+            </select>
+          </div>
+
+          <!-- Грива -->
+          <div class="option-group">
+            <label class="group-title">Грива</label>
+            <select id="mane-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="1">№1</option>
+              <option value="2">№2</option>
+              <option value="3">№3</option>
+              <option value="4">№4</option>
+              <option value="5">№5</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="mane-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант гривы...">
+          </div>
+
+          <!-- Шерсть -->
+          <div class="option-group">
+            <label class="group-title">Шерсть</label>
+            <select id="fur-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="На теле">На теле</option>
+              <option value="На лапах">На лапах</option>
+              <option value="На ушах">На ушах</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="fur-custom-text" class="custom-input hidden" placeholder="Опишите вариант шерсти...">
+          </div>
+
+          <!-- Хвост -->
+          <div class="option-group">
+            <label class="group-title">Хвост</label>
+            <select id="tail-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="1">№1</option>
+              <option value="2">№2</option>
+              <option value="3">№3</option>
+              <option value="4">№4</option>
+              <option value="5">№5</option>
+              <option value="6">№6</option>
+              <option value="7">№7</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="tail-custom-text" class="custom-input hidden" placeholder="Опишите свой вариант хвоста...">
+          </div>
+
+          <!-- Усы -->
+          <div class="option-group">
+            <label class="group-title">Усы</label>
+            <div class="inline-selects">
+              <select id="whiskers-select" class="styled-select">
+                <option value="–">Нет (–)</option>
+                <option value="1">№1</option>
+                <option value="2">№2</option>
+                <option value="3">№3</option>
+                <option value="4">№4</option>
+                <option value="5">№5</option>
+                <option value="custom">Свой вариант</option>
+              </select>
+              <div class="color-picker-wrap">
+                <label>Цвет:</label>
+                <input type="color" id="whiskers-color" value="#ffffff">
+              </div>
+            </div>
+            <input type="text" id="whiskers-custom-text" class="custom-input hidden" placeholder="Опишите свои усы...">
+          </div>
+
+          <!-- Одежда -->
+          <div class="option-group full-width">
+            <label class="group-title">Одежда</label>
+            <select id="clothes-select" class="styled-select">
+              <option value="–">Без одежды (–)</option>
+              <option value="Подгузник">Подгузник</option>
+              <option value="Соска">Соска</option>
+              <option value="Закрытый слип">Закрытый слип</option>
+              <option value="Слип с рукавами">Слип с рукавами</option>
+              <option value="Слип без рукавов">Слип без рукавов</option>
+              <option value="custom">Свой вариант</option>
+            </select>
+            <input type="text" id="clothes-custom-text" class="custom-input hidden" placeholder="Опишите цвет, узор или свой вариант одежды...">
+            
+            <div id="clothes-file-wrap" class="file-attach-wrap hidden">
+              <label>Прикрепить изображение одежды:</label>
+              <input type="file" id="clothes-file" accept="image/*">
+              <div id="clothes-preview" class="thumb-preview"></div>
+            </div>
+          </div>
+
+          <!-- Игрушка -->
+          <div class="option-group full-width">
+            <label class="group-title">Игрушка</label>
+            <select id="toy-select" class="styled-select">
+              <option value="–">Без игрушки (–)</option>
+              <option value="Медведь">Медведь</option>
+              <option value="Кролик">Кролик</option>
+              <option value="Кошка">Кошка</option>
+              <option value="Собака">Собака</option>
+              <option value="Тигр">Тигр</option>
+              <option value="Дракон">Дракон</option>
+              <option value="custom">Свой вариант / Свой цвет</option>
+            </select>
+            <input type="text" id="toy-custom-text" class="custom-input hidden" placeholder="Опишите свою игрушку или цвет...">
+            
+            <div id="toy-file-wrap" class="file-attach-wrap hidden">
+              <label>Прикрепить изображение игрушки:</label>
+              <input type="file" id="toy-file" accept="image/*">
+              <div id="toy-preview" class="thumb-preview"></div>
+            </div>
+          </div>
+
         </div>
       </section>
 
-      <!-- 2. Дополнения и Прайс -->
-      <section class="card addons-card">
-        <h2>2. Дополнительные опции</h2>
-        <p class="section-desc">Отметьте необходимые параметры для включения в смету</p>
-        
-        <div class="checkbox-list">
-          <label class="checkbox-item">
-            <input type="checkbox" class="addon-checkbox" data-name="Второй персонаж на арте" data-price="1500">
-            <span class="custom-check"></span>
-            <span class="addon-label">Второй персонаж</span>
-            <span class="addon-price">+1 500 ₽</span>
-          </label>
-
-          <label class="checkbox-item">
-            <input type="checkbox" class="addon-checkbox" data-name="Детализированный арт-фон" data-price="1000">
-            <span class="custom-check"></span>
-            <span class="addon-label">Сложный детальный фон</span>
-            <span class="addon-price">+1 000 ₽</span>
-          </label>
-
-          <label class="checkbox-item">
-            <input type="checkbox" class="addon-checkbox" data-name="Срочное выполнение (до 3-х дней)" data-price="800">
-            <span class="custom-check"></span>
-            <span class="addon-label">Срочный заказ (до 3 дней)</span>
-            <span class="addon-price">+800 ₽</span>
-          </label>
-
-          <label class="checkbox-item">
-            <input type="checkbox" class="addon-checkbox" data-name="Коммерческая лицензия (мерч, коммерция)" data-price="2000">
-            <span class="custom-check"></span>
-            <span class="addon-label">Коммерческие права</span>
-            <span class="addon-price">+2 000 ₽</span>
-          </label>
-
-          <label class="checkbox-item">
-            <input type="checkbox" class="addon-checkbox" data-name="Файл по слоям (PSD / CLIP)" data-price="500">
-            <span class="custom-check"></span>
-            <span class="addon-label">Исходник PSD / CLIP</span>
-            <span class="addon-price">+500 ₽</span>
-          </label>
-        </div>
-
-        <div class="price-summary">
-          <span>Предварительная стоимость:</span>
-          <span id="total-price" class="total-price-val">500 ₽</span>
-        </div>
-      </section>
-
-      <!-- 3. Загрузка референсов -->
-      <section class="card uploads-card">
-        <h2>3. Загрузка референсов</h2>
-        <p class="section-desc">Прикрепите картинки персонажа, примеры одежды или позы</p>
-        
-        <div class="dropzone" id="dropzone">
-          <input type="file" id="file-input" multiple accept="image/*">
-          <div class="dropzone-content">
-            <span class="upload-icon">📁</span>
-            <p>Перетащите файлы сюда или <strong>нажмите для выбора</strong></p>
-            <span class="upload-hint">PNG, JPG, WEBP до 10MB</span>
-          </div>
-        </div>
-
-        <div id="file-preview-grid" class="file-preview-grid"></div>
-      </section>
-
-      <!-- 4. Итоговая анкета -->
+      <!-- СЕКЦИЯ 2: ССЫЛКИ, АНКЕТА И СОЦ. СЕТИ -->
       <section class="card form-card">
-        <h2>4. Анкета заказа</h2>
-        <p class="section-desc">Данные автоматически собраны. Заполните контакт и отредактируйте текст при необходимости.</p>
+        <h2>2. Данные персонажа и заказа</h2>
 
-        <div class="form-inputs">
-          <div class="input-field">
-            <label for="client-contact">Ваш контакт (Telegram / VK / Discord) *</label>
-            <input type="text" id="client-contact" placeholder="@username или ссылка на профиль">
-          </div>
-
-          <div class="input-field">
-            <label for="client-notes">Дополнительные пожелания</label>
-            <textarea id="client-notes" rows="3" placeholder="Укажите цветовую гамму, важные детали, характер персонажа..."></textarea>
-          </div>
-
-          <div class="input-field">
-            <label for="summary-textarea">Итоговый текст анкеты (доступен для правки)</label>
-            <textarea id="summary-textarea" rows="10"></textarea>
+        <div class="input-field">
+          <label>1. Ссылки на персонажа:</label>
+          <div class="link-inputs">
+            <input type="url" id="link-color" placeholder="Ссылка на Окрас">
+            <input type="url" id="link-ref" placeholder="Ссылка на Референс">
+            <input type="url" id="link-art" placeholder="Ссылка на Арт">
           </div>
         </div>
 
-        <div class="actions">
-          <button id="btn-copy" class="btn btn-primary">
-            <span class="btn-icon">📋</span> Скопировать анкету
-          </button>
-          <span id="copy-toast" class="toast">Скопировано в буфер!</span>
+        <div class="input-field">
+          <label>Прикрепить файл референса:</label>
+          <input type="file" id="char-file" accept="image/*" multiple>
+          <div id="char-preview-grid" class="preview-grid"></div>
+        </div>
+
+        <div class="input-field">
+          <label>2. Уточнения к персонажу:</label>
+          <textarea id="char-notes" rows="2" placeholder="Особенности, шрамы, пятна..."></textarea>
+        </div>
+
+        <div class="input-field">
+          <label>4. Дополнения:</label>
+          <textarea id="addons-text" rows="2" placeholder="Дополнительные детали..."></textarea>
+        </div>
+
+        <div class="grid-2col">
+          <div class="input-field">
+            <label>5. Обводка:</label>
+            <select id="outline-select" class="styled-select">
+              <option value="–">Нет (–)</option>
+              <option value="Полупрозрачная">Полупрозрачная</option>
+              <option value="custom">Цветная (указать цвет)</option>
+            </select>
+            <input type="text" id="outline-color" class="custom-input hidden" placeholder="Укажите цвет обводки...">
+          </div>
+
+          <div class="input-field">
+            <label>6. Фон:</label>
+            <select id="bg-select" class="styled-select">
+              <option value="Без изменений">Без изменений</option>
+              <option value="Другие цвета">Другие цвета</option>
+              <option value="Другие элементы на фоне">Другие элементы на фоне</option>
+              <option value="Прозрачный">Прозрачный</option>
+              <option value="Однотонный">Однотонный</option>
+            </select>
+            <input type="text" id="bg-custom-color" class="custom-input hidden" placeholder="Укажите цвет фона...">
+          </div>
+
+          <div class="input-field">
+            <label>7. Время суток:</label>
+            <select id="time-select" class="styled-select">
+              <option value="–">Не важно (–)</option>
+              <option value="Утро">Утро</option>
+              <option value="День">День</option>
+              <option value="Вечер">Вечер</option>
+              <option value="Ночь">Ночь</option>
+            </select>
+          </div>
+
+          <div class="input-field">
+            <label>8. Способ оплаты:</label>
+            <select id="pay-select" class="styled-select">
+              <option value="Кроли">Кроли</option>
+              <option value="Рубли">Рубли</option>
+            </select>
+            <input type="url" id="pay-proof-link" placeholder="Ссылка на скриншот оплаты">
+          </div>
+        </div>
+
+        <div class="input-field">
+          <label>9. Куда прислать готовую работу:</label>
+          <div class="inline-selects">
+            <select id="social-select" class="styled-select">
+              <option value="ВК">ВК</option>
+              <option value="ТГ">ТГ</option>
+              <option value="ЛС Вара">ЛС Вара</option>
+            </select>
+            <input type="text" id="social-link" placeholder="Ваша ссылка / логин (@username)">
+          </div>
         </div>
       </section>
     </main>
+
+    <!-- СЕКЦИЯ 3: ГОТОВЫЙ BB-КОД -->
+    <section class="card code-card">
+      <div class="code-header">
+        <h2>3. Сформированный BB-код</h2>
+        <button id="btn-copy" class="btn-copy">📋 Скопировать BB-код</button>
+      </div>
+      <textarea id="bbcode-output" readonly rows="16"></textarea>
+      <div id="toast" class="toast">Скопировано в буфер обмена!</div>
+    </section>
+
   </div>
 
   <script src="script.js"></script>
