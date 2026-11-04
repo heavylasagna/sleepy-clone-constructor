@@ -1,344 +1,258 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Базовые данные состояния
-  const state = {
-    builder: {
-      body: { val: 'slim', label: 'Стройный', price: 0 },
-      hair: { val: 'short', label: 'Короткая прическа', price: 200 },
-      expression: { val: 'smile', label: 'Улыбка', price: 0 },
-      clothes: { val: 'casual', label: 'Кэжуал', price: 300 },
-      bg: { val: 'simple', label: 'Простой цвет', price: 0 },
-      effects: { val: 'none', label: 'Без эффектов', price: 0 }
-    },
-    addons: [],
-    uploadedFiles: [],
-    contact: '',
-    notes: ''
-  };
-
-  // Элементы DOM
-  const totalPriceEl = document.getElementById('total-price');
-  const summaryTextarea = document.getElementById('summary-textarea');
-  const contactInput = document.getElementById('client-contact');
-  const notesTextarea = document.getElementById('client-notes');
-  const btnCopy = document.getElementById('btn-copy');
-  const copyToast = document.getElementById('copy-toast');
-  const dropzone = document.getElementById('dropzone');
-  const fileInput = document.getElementById('file-input');
-  const filePreviewGrid = document.getElementById('file-preview-grid');
-
-  // SVG Слои
-  const layers = {
-    bg: document.getElementById('layer-bg'),
-    body: document.getElementById('layer-body'),
-    hair: document.getElementById('layer-hair'),
-    clothes: document.getElementById('layer-clothes'),
-    expression: document.getElementById('layer-expression'),
-    effects: document.getElementById('layer-effects')
-  };
-
-  // Инициализация
-  initBuilderButtons();
-  initAddons();
-  initFileUploads();
-  initInputs();
-  renderCanvas();
-  recalculateTotal();
-
-  // 1. Конструктор слоев
-  function initBuilderButtons() {
-    document.querySelectorAll('.options-grid').forEach(grid => {
-      const category = grid.dataset.category;
-      
-      grid.querySelectorAll('.opt-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-          grid.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('active'));
-          btn.classList.add('active');
-
-          state.builder[category] = {
-            val: btn.dataset.value,
-            label: btn.textContent.trim(),
-            price: parseInt(btn.dataset.price) || 0
-          };
-
-          renderCanvas();
-          recalculateTotal();
-        });
-      });
-    });
-  }
-
-  // Отрисовка SVG-элементов слоями
-  function renderCanvas() {
-    // 1. Background
-    const bgVal = state.builder.bg.val;
-    if (bgVal === 'nature') {
-      layers.bg.innerHTML = `<circle cx="250" cy="250" r="180" fill="#15803d" opacity="0.4"/>`;
-    } else if (bgVal === 'city') {
-      layers.bg.innerHTML = `
-        <rect x="100" y="100" width="300" height="300" fill="#7c3aed" opacity="0.2" rx="20"/>
-        <circle cx="250" cy="200" r="90" fill="#ec4899" opacity="0.3"/>
-      `;
-    } else {
-      layers.bg.innerHTML = '';
-    }
-
-    // 2. Body
-    const bodyVal = state.builder.body.val;
-    if (bodyVal === 'chibi') {
-      layers.body.innerHTML = `
-        <circle cx="250" cy="220" r="70" fill="#fde047"/>
-        <rect x="220" y="280" width="60" height="90" rx="30" fill="#fde047"/>
-      `;
-    } else if (bodyVal === 'heroic') {
-      layers.body.innerHTML = `
-        <circle cx="250" cy="180" r="55" fill="#fde047"/>
-        <path d="M 170 230 L 330 230 L 290 380 L 210 380 Z" fill="#fde047"/>
-      `;
-    } else { // slim
-      layers.body.innerHTML = `
-        <circle cx="250" cy="190" r="60" fill="#fde047"/>
-        <rect x="210" y="240" width="80" height="130" rx="20" fill="#fde047"/>
-      `;
-    }
-
-    // 3. Hair
-    const hairVal = state.builder.hair.val;
-    if (hairVal === 'long') {
-      layers.hair.innerHTML = `<path d="M 180 180 C 170 300, 160 350, 200 380 C 220 200, 280 200, 300 380 C 340 350, 330 300, 320 180 Z" fill="#3b82f6"/>`;
-    } else if (hairVal === 'ponytail') {
-      layers.hair.innerHTML = `
-        <path d="M 180 170 Q 250 110 320 170 Q 250 150 180 170 Z" fill="#3b82f6"/>
-        <path d="M 300 160 Q 380 180 360 270 Q 320 240 300 190 Z" fill="#3b82f6"/>
-      `;
-    } else { // short
-      layers.hair.innerHTML = `<path d="M 180 190 Q 250 100 320 190 Q 250 140 180 190 Z" fill="#3b82f6"/>`;
-    }
-
-    // 4. Expression
-    const expVal = state.builder.expression.val;
-    if (expVal === 'wink') {
-      layers.expression.innerHTML = `
-        <circle cx="225" cy="185" r="6" fill="#0f172a"/>
-        <path d="M 265 185 Q 275 175 285 185" stroke="#0f172a" stroke-width="4" fill="none" stroke-linecap="round"/>
-        <path d="M 235 210 Q 250 225 265 210" stroke="#0f172a" stroke-width="4" fill="none" stroke-linecap="round"/>
-      `;
-    } else if (expVal === 'serious') {
-      layers.expression.innerHTML = `
-        <circle cx="225" cy="185" r="6" fill="#0f172a"/>
-        <circle cx="275" cy="185" r="6" fill="#0f172a"/>
-        <line x1="235" y1="210" x2="265" y2="210" stroke="#0f172a" stroke-width="4" stroke-linecap="round"/>
-      `;
-    } else { // smile
-      layers.expression.innerHTML = `
-        <circle cx="225" cy="185" r="6" fill="#0f172a"/>
-        <circle cx="275" cy="185" r="6" fill="#0f172a"/>
-        <path d="M 230 205 Q 250 230 270 205" stroke="#0f172a" stroke-width="4" fill="none" stroke-linecap="round"/>
-      `;
-    }
-
-    // 5. Clothes
-    const clothesVal = state.builder.clothes.val;
-    if (clothesVal === 'fantasy') {
-      layers.clothes.innerHTML = `
-        <path d="M 200 245 L 250 290 L 300 245 L 310 370 L 190 370 Z" fill="#ef4444"/>
-        <circle cx="250" cy="290" r="8" fill="#fbbf24"/>
-      `;
-    } else if (clothesVal === 'cyber') {
-      layers.clothes.innerHTML = `
-        <rect x="200" y="240" width="100" height="130" fill="#10b981" rx="10"/>
-        <line x1="250" y1="240" x2="250" y2="370" stroke="#064e3b" stroke-width="4"/>
-      `;
-    } else { // casual
-      layers.clothes.innerHTML = `<rect x="205" y="240" width="90" height="130" fill="#8b5cf6" rx="12"/>`;
-    }
-
-    // 6. Effects
-    const effVal = state.builder.effects.val;
-    if (effVal === 'sparkles') {
-      layers.effects.innerHTML = `
-        <path d="M 140 120 L 150 140 L 170 150 L 150 160 L 140 180 L 130 160 L 110 150 L 130 140 Z" fill="#fbbf24"/>
-        <path d="M 350 260 L 358 275 L 375 280 L 358 285 L 350 300 L 342 285 L 325 280 L 342 275 Z" fill="#fbbf24"/>
-      `;
-    } else if (effVal === 'fire') {
-      layers.effects.innerHTML = `
-        <circle cx="130" cy="360" r="30" fill="#f97316" opacity="0.6"/>
-        <circle cx="370" cy="360" r="30" fill="#f97316" opacity="0.6"/>
-      `;
-    } else {
-      layers.effects.innerHTML = '';
-    }
-  }
-
-  // 2. Дополнения
-  function initAddons() {
-    document.querySelectorAll('.addon-checkbox').forEach(chk => {
-      chk.addEventListener('change', () => {
-        updateAddonsState();
-        recalculateTotal();
-      });
-    });
-  }
-
-  function updateAddonsState() {
-    state.addons = [];
-    document.querySelectorAll('.addon-checkbox:checked').forEach(chk => {
-      state.addons.push({
-        name: chk.dataset.name,
-        price: parseInt(chk.dataset.price) || 0
-      });
-    });
-  }
-
-  // 3. Загрузка референсов
-  function initFileUploads() {
-    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
-      dropzone.addEventListener(eventName, preventDefaults, false);
-    });
-
-    function preventDefaults(e) {
-      e.preventDefault();
-      e.stopPropagation();
-    }
-
-    ['dragenter', 'dragover'].forEach(eventName => {
-      dropzone.addEventListener(eventName, () => dropzone.classList.add('dragover'), false);
-    });
-
-    ['dragleave', 'drop'].forEach(eventName => {
-      dropzone.addEventListener(eventName, () => dropzone.classList.remove('dragover'), false);
-    });
-
-    dropzone.addEventListener('drop', (e) => {
-      const files = e.dataTransfer.files;
-      handleFiles(files);
-    });
-
-    fileInput.addEventListener('change', (e) => {
-      handleFiles(e.target.files);
-    });
-  }
-
-  function handleFiles(files) {
-    Array.from(files).forEach(file => {
-      if (!file.type.startsWith('image/')) return;
-      
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const fileObj = { name: file.name, src: e.target.result };
-        state.uploadedFiles.push(fileObj);
-        renderPreviews();
-        updateSummaryText();
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  function renderPreviews() {
-    filePreviewGrid.innerHTML = '';
-    state.uploadedFiles.forEach((file, index) => {
-      const thumb = document.createElement('div');
-      thumb.className = 'preview-thumb';
-      thumb.innerHTML = `
-        <img src="${file.src}" alt="${file.name}">
-        <button class="remove-btn" data-index="${index}">✕</button>
-      `;
-      filePreviewGrid.appendChild(thumb);
-    });
-
-    filePreviewGrid.querySelectorAll('.remove-btn').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const idx = parseInt(e.target.dataset.index);
-        state.uploadedFiles.splice(idx, 1);
-        renderPreviews();
-        updateSummaryText();
-      });
-    });
-  }
-
-  // 4. Текстовые поля и интеграция
-  function initInputs() {
-    contactInput.addEventListener('input', (e) => {
-      state.contact = e.target.value;
-      updateSummaryText();
-    });
-
-    notesTextarea.addEventListener('input', (e) => {
-      state.notes = e.target.value;
-      updateSummaryText();
-    });
-
-    btnCopy.addEventListener('click', () => {
-      summaryTextarea.select();
-      navigator.clipboard.writeText(summaryTextarea.value).then(() => {
-        copyToast.classList.add('show');
-        setTimeout(() => copyToast.classList.remove('show'), 2000);
-      });
-    });
-  }
-
-  // Расчет итоговой суммы
-  function recalculateTotal() {
-    let total = 0;
+  // Находим все необходимые элементы DOM
+  const elements = {
+    eyelashes: document.querySelectorAll('input[name="eyelashes"]'),
     
-    // Элементы конструктора
-    Object.values(state.builder).forEach(item => {
-      total += item.price;
-    });
+    blushSelect: document.getElementById('blush-select'),
+    blushColor: document.getElementById('blush-color'),
+    blushCustom: document.getElementById('blush-custom-text'),
+    
+    earsNum: document.getElementById('ears-num'),
+    earsType: document.getElementById('ears-type'),
+    earsCustom: document.getElementById('ears-custom-text'),
 
-    // Дополнения
-    state.addons.forEach(item => {
-      total += item.price;
-    });
+    cheeksSelect: document.getElementById('cheeks-select'),
+    cheeksCustom: document.getElementById('cheeks-custom-text'),
 
-    totalPriceEl.textContent = `${total.toLocaleString('ru-RU')} ₽`;
-    updateSummaryText(total);
+    tuftSelect: document.getElementById('tuft-select'),
+    tuftCustom: document.getElementById('tuft-custom-text'),
+
+    bangsSelect: document.getElementById('bangs-select'),
+
+    maneSelect: document.getElementById('mane-select'),
+    maneCustom: document.getElementById('mane-custom-text'),
+
+    furSelect: document.getElementById('fur-select'),
+    furCustom: document.getElementById('fur-custom-text'),
+
+    tailSelect: document.getElementById('tail-select'),
+    tailCustom: document.getElementById('tail-custom-text'),
+
+    whiskersSelect: document.getElementById('whiskers-select'),
+    whiskersColor: document.getElementById('whiskers-color'),
+    whiskersCustom: document.getElementById('whiskers-custom-text'),
+
+    clothesSelect: document.getElementById('clothes-select'),
+    clothesCustom: document.getElementById('clothes-custom-text'),
+    clothesFileWrap: document.getElementById('clothes-file-wrap'),
+    clothesFile: document.getElementById('clothes-file'),
+    clothesPreview: document.getElementById('clothes-preview'),
+
+    toySelect: document.getElementById('toy-select'),
+    toyCustom: document.getElementById('toy-custom-text'),
+    toyFileWrap: document.getElementById('toy-file-wrap'),
+    toyFile: document.getElementById('toy-file'),
+    toyPreview: document.getElementById('toy-preview'),
+
+    linkColor: document.getElementById('link-color'),
+    linkRef: document.getElementById('link-ref'),
+    linkArt: document.getElementById('link-art'),
+    charNotes: document.getElementById('char-notes'),
+    addonsText: document.getElementById('addons-text'),
+
+    outlineSelect: document.getElementById('outline-select'),
+    outlineColor: document.getElementById('outline-color'),
+
+    bgSelect: document.getElementById('bg-select'),
+    bgCustomColor: document.getElementById('bg-custom-color'),
+
+    timeSelect: document.getElementById('time-select'),
+    paySelect: document.getElementById('pay-select'),
+    payProofLink: document.getElementById('pay-proof-link'),
+
+    socialSelect: document.getElementById('social-select'),
+    socialLink: document.getElementById('social-link'),
+
+    output: document.getElementById('bbcode-output'),
+    btnCopy: document.getElementById('btn-copy'),
+    toast: document.getElementById('toast'),
+
+    charFile: document.getElementById('char-file'),
+    charPreviewGrid: document.getElementById('char-preview-grid')
+  };
+
+  // Показ/Скрытие "Свой вариант" и доп. полей
+  function toggleCustom(selectEl, customEl, wrapEl = null) {
+    const isCustom = selectEl.value === 'custom';
+    if (customEl) customEl.classList.toggle('hidden', !isCustom);
+    if (wrapEl) wrapEl.classList.toggle('hidden', !isCustom);
   }
 
-  // Генерация текста анкеты
-  function updateSummaryText(calculatedTotal) {
-    let currentTotal = calculatedTotal;
-    if (currentTotal === undefined) {
-      let t = 0;
-      Object.values(state.builder).forEach(i => t += i.price);
-      state.addons.forEach(i => t += i.price);
-      currentTotal = t;
+  // Привязываем события скрытия/показа
+  elements.blushSelect.addEventListener('change', () => toggleCustom(elements.blushSelect, elements.blushCustom));
+  elements.earsNum.addEventListener('change', () => toggleCustom(elements.earsNum, elements.earsCustom));
+  elements.cheeksSelect.addEventListener('change', () => toggleCustom(elements.cheeksSelect, elements.cheeksCustom));
+  elements.tuftSelect.addEventListener('change', () => toggleCustom(elements.tuftSelect, elements.tuftCustom));
+  elements.maneSelect.addEventListener('change', () => toggleCustom(elements.maneSelect, elements.maneCustom));
+  elements.furSelect.addEventListener('change', () => toggleCustom(elements.furSelect, elements.furCustom));
+  elements.tailSelect.addEventListener('change', () => toggleCustom(elements.tailSelect, elements.tailCustom));
+  elements.whiskersSelect.addEventListener('change', () => toggleCustom(elements.whiskersSelect, elements.whiskersCustom));
+  
+  elements.clothesSelect.addEventListener('change', () => toggleCustom(elements.clothesSelect, elements.clothesCustom, elements.clothesFileWrap));
+  elements.toySelect.addEventListener('change', () => toggleCustom(elements.toySelect, elements.toyCustom, elements.toyFileWrap));
+  
+  elements.outlineSelect.addEventListener('change', () => toggleCustom(elements.outlineSelect, elements.outlineColor));
+  elements.bgSelect.addEventListener('change', () => {
+    const isOneColor = elements.bgSelect.value === 'Однотонный';
+    elements.bgCustomColor.classList.toggle('hidden', !isOneColor);
+  });
+
+  // Загрузка предпросмотров файлов
+  function setupFilePreview(inputEl, containerEl) {
+    inputEl.addEventListener('change', (e) => {
+      containerEl.innerHTML = '';
+      Array.from(e.target.files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (ev) => {
+          const img = document.createElement('img');
+          img.src = ev.target.result;
+          containerEl.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+      generateBBCode();
+    });
+  }
+
+  setupFilePreview(elements.clothesFile, elements.clothesPreview);
+  setupFilePreview(elements.toyFile, elements.toyPreview);
+  setupFilePreview(elements.charFile, elements.charPreviewGrid);
+
+  // Слушатели событий для мгновенного обновления кода
+  document.querySelectorAll('input, select, textarea').forEach(item => {
+    item.addEventListener('input', generateBBCode);
+    item.addEventListener('change', generateBBCode);
+  });
+
+  // Главная функция сборки BB-Кода
+  function generateBBCode() {
+    // 1. Ссылки
+    const linkColorVal = elements.linkColor.value.trim() ? `[url=${elements.linkColor.value.trim()}]Окрас[/url]` : 'Окрас';
+    const linkRefVal = elements.linkRef.value.trim() ? `[url=${elements.linkRef.value.trim()}]Референс[/url]` : 'Референс';
+    const linkArtVal = elements.linkArt.value.trim() ? `[url=${elements.linkArt.value.trim()}]Арт[/url]` : 'Арт';
+
+    // Ресницы
+    let lashVal = '–';
+    elements.eyelashes.forEach(r => { if(r.checked) lashVal = r.value; });
+
+    // Румянец
+    let blushVal = '–';
+    if (elements.blushSelect.value === 'custom') {
+      blushVal = elements.blushCustom.value || 'Свой вариант';
+    } else if (elements.blushSelect.value !== '–') {
+      blushVal = `${elements.blushSelect.value} [${elements.blushColor.value}]`;
     }
 
-    const b = state.builder;
-    const addonsList = state.addons.length > 0 
-      ? state.addons.map(a => `  • ${a.name} (+${a.price} ₽)`).join('\n')
-      : '  • Нет выбранных опций';
+    // Уши
+    let earsVal = '–';
+    if (elements.earsNum.value === 'custom') {
+      earsVal = elements.earsCustom.value || 'Свой вариант';
+    } else if (elements.earsNum.value !== '–') {
+      earsVal = `${elements.earsNum.value} [${elements.earsType.value}]`;
+    }
 
-    const fileCount = state.uploadedFiles.length;
-    const filesInfo = fileCount > 0 
-      ? `Прикреплено референсов: ${fileCount} шт.` 
-      : 'Референсы не загружены (отправлю отдельно)';
+    // Щёки, Хохолок, Чёлка, Грива, Шерсть, Хвост
+    const getSimpleVal = (selectEl, customEl) => {
+      if (selectEl.value === 'custom') return customEl.value || 'Свой вариант';
+      return selectEl.value;
+    };
 
-    const text = `📋 АНКЕТА ЗАКАЗА АРТА
------------------------------------
-👤 Контакт заказчика: ${state.contact || 'Не указан'}
+    const cheeksVal = getSimpleVal(elements.cheeksSelect, elements.cheeksCustom);
+    const tuftVal = getSimpleVal(elements.tuftSelect, elements.tuftCustom);
+    const bangsVal = elements.bangsSelect.value;
+    const maneVal = getSimpleVal(elements.maneSelect, elements.maneCustom);
+    const furVal = getSimpleVal(elements.furSelect, elements.furCustom);
+    const tailVal = getSimpleVal(elements.tailSelect, elements.tailCustom);
 
-🎨 КОНСТРУКТОР ПЕРСОНАЖА:
-  • Поза/Корпус: ${b.body.label}
-  • Прическа: ${b.hair.label}
-  • Эмоция: ${b.expression.label}
-  • Одежда: ${b.clothes.label}
-  • Фон: ${b.bg.label}
-  • Эффекты: ${b.effects.label}
+    // Усы
+    let whiskersVal = '–';
+    if (elements.whiskersSelect.value === 'custom') {
+      whiskersVal = elements.whiskersCustom.value || 'Свой вариант';
+    } else if (elements.whiskersSelect.value !== '–') {
+      whiskersVal = `${elements.whiskersSelect.value} [${elements.whiskersColor.value}]`;
+    }
 
-➕ ДОПОЛНИТЕЛЬНЫЕ ОПЦИИ:
-${addonsList}
+    // Одежда
+    let clothesVal = '–';
+    if (elements.clothesSelect.value === 'custom') {
+      clothesVal = elements.clothesCustom.value || 'Свой вариант';
+    } else if (elements.clothesSelect.value !== '–') {
+      clothesVal = elements.clothesCustom.value 
+        ? `${elements.clothesSelect.value} [${elements.clothesCustom.value}]` 
+        : elements.clothesSelect.value;
+    }
 
-🖼 РЕФЕРЕНСЫ:
-  • ${filesInfo}
+    // Игрушка
+    let toyVal = '–';
+    if (elements.toySelect.value === 'custom') {
+      toyVal = elements.toyCustom.value || 'Свой вариант';
+    } else if (elements.toySelect.value !== '–') {
+      toyVal = elements.toyCustom.value 
+        ? `${elements.toySelect.value} [${elements.toyCustom.value}]` 
+        : elements.toySelect.value;
+    }
 
-💬 ПРИМЕЧАНИЯ / ПОЖЕЛАНИЯ:
-${state.notes ? state.notes : '  • Без дополнительных примечаний'}
+    // Обводка
+    let outlineVal = '–';
+    if (elements.outlineSelect.value === 'custom') {
+      outlineVal = elements.outlineColor.value || 'Цветная';
+    } else {
+      outlineVal = elements.outlineSelect.value;
+    }
 
------------------------------------
-💰 РАСЧЕТНАЯ СТОИМОСТЬ: ${currentTotal.toLocaleString('ru-RU')} ₽
------------------------------------`;
+    // Фон
+    let bgVal = elements.bgSelect.value;
+    if (bgVal === 'Однотонный' && elements.bgCustomColor.value) {
+      bgVal = `Однотонный [${elements.bgCustomColor.value}]`;
+    }
 
-    summaryTextarea.value = text;
+    // Оплата
+    let payVal = elements.paySelect.value;
+    if (elements.payProofLink.value.trim()) {
+      payVal += ` [[url=${elements.payProofLink.value.trim()}]скриншот оплаты[/url]]`;
+    }
+
+    // Соцсеть
+    const socialVal = elements.socialLink.value.trim() 
+      ? `${elements.socialSelect.value} (${elements.socialLink.value.trim()})`
+      : elements.socialSelect.value;
+
+    // Сборка Шаблона
+    const bbcode = `[code][b]1.[/b] ${linkColorVal}, ${linkRefVal}, ${linkArtVal}
+[b]2.[/b] ${elements.charNotes.value.trim() || 'Уточнения отсутствуют'}
+[b]3.[/b] [header=детали]Детали[/header]
+[block=детали][b]Ресницы:[/b] ${lashVal}
+[b]Румянец:[/b] ${blushVal}
+[b]Уши:[/b] ${earsVal}
+[b]Щёки:[/b] ${cheeksVal}
+[b]Хохолок:[/b] ${tuftVal}
+[b]Чёлка:[/b] ${bangsVal}
+[b]Грива:[/b] ${maneVal}
+[b]Шерсть:[/b] ${furVal}
+[b]Хвост:[/b] ${tailVal}
+[b]Усы:[/b] ${whiskersVal}
+
+[b]Одежда:[/b] ${clothesVal}
+[b]Игрушка:[/b] ${toyVal}[/block]
+[b]4.[/b] ${elements.addonsText.value.trim() || '–'}
+[b]5.[/b] Обводка: ${outlineVal}
+[b]6.[/b] Фон: ${bgVal}
+[b]7.[/b] Время суток: ${elements.timeSelect.value}
+[b]8.[/b] Способ оплаты: ${payVal}
+[b]9.[/b] Готовую работу прислать в: ${socialVal}[/code]`;
+
+    elements.output.value = bbcode;
   }
+
+  // Копирование в буфер
+  elements.btnCopy.addEventListener('click', () => {
+    elements.output.select();
+    navigator.clipboard.writeText(elements.output.value).then(() => {
+      elements.toast.classList.add('show');
+      setTimeout(() => elements.toast.classList.remove('show'), 2000);
+    });
+  });
+
+  // Первоначальный вызов
+  generateBBCode();
 });
