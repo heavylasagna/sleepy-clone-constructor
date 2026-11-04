@@ -69,31 +69,25 @@ document.addEventListener('DOMContentLoaded', () => {
     toast: document.getElementById('toast')
   };
 
-  // Переключение видимости полей "Свой вариант" и параметров цвета
   function updateVisibility() {
-    // Румянец
     const isBlushCustom = elements.blushSelect.value === 'custom';
     const isBlushActive = elements.blushSelect.value !== '–' && !isBlushCustom;
     elements.blushCustom.classList.toggle('hidden', !isBlushCustom);
     elements.blushColorWrap.classList.toggle('hidden', !isBlushActive);
 
-    // Уши
     elements.earsCustom.classList.toggle('hidden', elements.earsNum.value !== 'custom');
 
-    // Простые текстовые с инпутом "Свой вариант"
     elements.cheeksCustom.classList.toggle('hidden', elements.cheeksSelect.value !== 'custom');
     elements.tuftCustom.classList.toggle('hidden', elements.tuftSelect.value !== 'custom');
     elements.maneCustom.classList.toggle('hidden', elements.maneSelect.value !== 'custom');
     elements.furCustom.classList.toggle('hidden', elements.furSelect.value !== 'custom');
     elements.tailCustom.classList.toggle('hidden', elements.tailSelect.value !== 'custom');
 
-    // Усы
     const isWhiskersCustom = elements.whiskersSelect.value === 'custom';
     const isWhiskersActive = elements.whiskersSelect.value !== '–' && !isWhiskersCustom;
     elements.whiskersCustom.classList.toggle('hidden', !isWhiskersCustom);
     elements.whiskersColorWrap.classList.toggle('hidden', !isWhiskersActive);
 
-    // Одежда и Игрушка
     const isClothesSelected = elements.clothesSelect.value !== '–';
     elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
     elements.clothesLinkInput.classList.toggle('hidden', !isClothesSelected);
@@ -102,20 +96,16 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
     elements.toyLinkInput.classList.toggle('hidden', !isToySelected);
 
-    // Обводка (цветная палитра)
     elements.outlineColorWrap.classList.toggle('hidden', !elements.outlineColored.checked);
 
-    // Фон
     const bgVal = elements.bgSelect.value;
     elements.bgColorPickerWrap.classList.toggle('hidden', bgVal !== 'Однотонный');
     elements.bgCustomText.classList.toggle('hidden', bgVal !== 'Другие цвета' && bgVal !== 'Другие элементы на фоне');
 
-    // Соцсеть "ЛС Вара" скрывает поле ввода ссылки
     const isLSPos = elements.socialSelect.value === 'ЛС Вара';
     elements.socialLink.classList.toggle('hidden', isLSPos);
   }
 
-  // Привязка слушателей для обновления видимости и рендеринга кода
   document.querySelectorAll('input, select, textarea').forEach(item => {
     item.addEventListener('input', () => {
       updateVisibility();
@@ -127,9 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Главная функция сборки BB-Кода
   function generateBBCode() {
-    // 1. Ссылки персонажа (убираем пункт, если ссылка не вставлена)
     const linksArr = [];
     const colorVal = elements.linkColor.value.trim();
     const refVal = elements.linkRef.value.trim();
@@ -141,11 +129,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const finalLinksStr = linksArr.length > 0 ? linksArr.join(', ') : '–';
 
-    // Ресницы
     let lashVal = '–';
     elements.eyelashes.forEach(r => { if (r.checked) lashVal = r.value; });
 
-    // Румянец
     let blushVal = '–';
     if (elements.blushSelect.value === 'custom') {
       blushVal = elements.blushCustom.value.trim() || 'Свой вариант';
@@ -153,7 +139,6 @@ document.addEventListener('DOMContentLoaded', () => {
       blushVal = `${elements.blushSelect.value} [${elements.blushColor.value}]`;
     }
 
-    // Уши
     let earsVal = '–';
     if (elements.earsNum.value === 'custom') {
       earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
@@ -161,7 +146,6 @@ document.addEventListener('DOMContentLoaded', () => {
       earsVal = `${elements.earsNum.value} [${elements.earsType.value}]`;
     }
 
-    // Вспомогательная функция для численных полей
     const getSimpleVal = (selectEl, customEl) => {
       if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
       return selectEl.value;
@@ -174,7 +158,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const furVal = getSimpleVal(elements.furSelect, elements.furCustom);
     const tailVal = getSimpleVal(elements.tailSelect, elements.tailCustom);
 
-    // Усы
     let whiskersVal = '–';
     if (elements.whiskersSelect.value === 'custom') {
       whiskersVal = elements.whiskersCustom.value.trim() || 'Свой вариант';
@@ -182,7 +165,6 @@ document.addEventListener('DOMContentLoaded', () => {
       whiskersVal = `${elements.whiskersSelect.value} [${elements.whiskersColor.value}]`;
     }
 
-    // Одежда
     let clothesVal = '–';
     if (elements.clothesSelect.value !== '–') {
       const baseName = elements.clothesSelect.value === 'custom' 
@@ -200,7 +182,6 @@ document.addEventListener('DOMContentLoaded', () => {
       clothesVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
     }
 
-    // Игрушка
     let toyVal = '–';
     if (elements.toySelect.value !== '–') {
       const baseName = elements.toySelect.value === 'custom'
@@ -218,7 +199,6 @@ document.addEventListener('DOMContentLoaded', () => {
       toyVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
     }
 
-    // Обводка (комбинируемая: полупрозрачная / цветная)
     let outlineParts = [];
     if (elements.outlineSemi.checked) {
       outlineParts.push('Полупрозрачная');
@@ -228,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     let outlineVal = outlineParts.length > 0 ? outlineParts.join(', ') : '–';
 
-    // Фон
     let bgVal = elements.bgSelect.value;
     if (bgVal === 'Однотонный') {
       bgVal = `Однотонный [${elements.bgColorPicker.value}]`;
@@ -236,19 +215,16 @@ document.addEventListener('DOMContentLoaded', () => {
       bgVal = `${bgVal} [${elements.bgCustomText.value.trim()}]`;
     }
 
-    // Оплата
     let payVal = elements.paySelect.value;
     if (elements.payProofLink.value.trim()) {
       payVal += ` [[url=${elements.payProofLink.value.trim()}]скриншот оплаты[/url]]`;
     }
 
-    // Соцсеть
     let socialVal = elements.socialSelect.value;
     if (socialVal !== 'ЛС Вара' && elements.socialLink.value.trim()) {
       socialVal += ` (${elements.socialLink.value.trim()})`;
     }
 
-    // Сборка Шаблона (без [code][/code])
     const bbcode = `[b]1.[/b] ${finalLinksStr}
 [b]2.[/b] ${elements.charNotes.value.trim() || '–'}
 [b]3.[/b] [header=детали]Детали[/header]
@@ -275,7 +251,6 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.output.value = bbcode;
   }
 
-  // Копирование в буфер
   elements.btnCopy.addEventListener('click', () => {
     elements.output.select();
     navigator.clipboard.writeText(elements.output.value).then(() => {
@@ -284,7 +259,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Первоначальный вызов
   updateVisibility();
   generateBBCode();
 });
