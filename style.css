@@ -18,54 +18,59 @@
   padding: 0;
 }
 
+/* Убираем скролл у всей страницы целиком */
 body {
   font-family: 'Nunito', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-dark);
-  padding: 24px 16px;
-  line-height: 1.5;
-  overflow-x: hidden;
+  padding: 16px;
+  height: 100vh;
+  overflow: hidden;
 }
 
 .app-container {
   max-width: 1350px;
+  height: 100%;
   margin: 0 auto;
+  display: flex;
+  flex-direction: column;
 }
 
 .app-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
+  flex-shrink: 0;
 }
 
 .app-header h1 {
   font-family: 'Comfortaa', cursive;
-  font-size: 1.8rem;
+  font-size: 1.6rem;
   color: var(--primary);
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 
 .app-header p {
   color: var(--text-muted);
-  font-size: 0.95rem;
+  font-size: 0.85rem;
 }
 
-/* ДВУХКОЛОНОЧНЫЙ МАКЕТ С НЕЗАВИСИМЫМ СКРОЛЛОМ */
+/* ДВУХКОЛОНОЧНЫЙ МАКЕТ */
 .constructor-workspace {
   display: grid;
   grid-template-columns: 1fr;
-  gap: 20px;
+  gap: 16px;
+  flex-grow: 1;
+  min-height: 0; /* Важно для работы flex/grid скролла */
 }
 
 @media (min-width: 900px) {
   .constructor-workspace {
-    /* Левая колонка под уменьшенное превью 500х520, правая со своим скроллом */
     grid-template-columns: 540px minmax(0, 1fr);
-    height: calc(100vh - 120px);
     align-items: start;
   }
 }
 
-/* ЛЕВАЯ КОЛОНКА (ФИКСИРОВАННАЯ) */
+/* ЛЕВАЯ КОЛОНКА СО СВОИМ СКРОЛЛОМ */
 .left-sidebar {
   display: flex;
   flex-direction: column;
@@ -80,7 +85,7 @@ body {
   }
 }
 
-/* ПРАВАЯ КОЛОНКА СО СВОИМ СКРОЛЛОМ И КАСТОМНЫМ ПОЛЗУНКОМ */
+/* ПРАВАЯ КОЛОНКА СО СВОИМ СКРОЛЛОМ */
 @media (min-width: 900px) {
   .right-content-scrollable {
     height: 100%;
@@ -89,7 +94,7 @@ body {
   }
 }
 
-/* КАСТОМНЫЙ СКРОЛЛБАР ДЛЯ НЕЖНО-ГОЛУБОЙ ТЕМЫ */
+/* КАСТОМНЫЙ СКРОЛЛБАР */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -113,19 +118,19 @@ body {
   background: var(--panel-bg);
   border: 2px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 20px;
-  margin-bottom: 20px;
+  padding: 16px;
+  margin-bottom: 16px;
   box-shadow: var(--shadow);
 }
 
 .card h2 {
   font-family: 'Comfortaa', cursive;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   color: var(--primary);
-  margin-bottom: 12px;
+  margin-bottom: 10px;
 }
 
-/* Превью ровно 500x520 пикселей */
+/* Превью 500x520 пикселей */
 .art-preview-box {
   width: 100%;
   width: 500px;
@@ -152,8 +157,8 @@ body {
   background: #f8fafc;
   border: 1px dashed var(--panel-border);
   border-radius: 12px;
-  padding: 14px;
-  min-height: 60px;
+  padding: 12px;
+  min-height: 50px;
 }
 
 .pricing-empty {
@@ -167,7 +172,7 @@ body {
 .form-grid {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: 12px;
 }
 
 .option-group {
@@ -249,7 +254,7 @@ input[type="color"] {
 }
 
 .input-field {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .input-field label {
@@ -283,7 +288,7 @@ input[type="color"] {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .btn-copy {
