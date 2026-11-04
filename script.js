@@ -47,7 +47,8 @@ document.addEventListener('DOMContentLoaded', () => {
     charNotes: document.getElementById('char-notes'),
     addonsText: document.getElementById('addons-text'),
 
-    outlineSelect: document.getElementById('outline-select'),
+    outlineSemi: document.getElementById('outline-semi'),
+    outlineColored: document.getElementById('outline-colored'),
     outlineColorWrap: document.getElementById('outline-color-wrap'),
     outlineColorPicker: document.getElementById('outline-color-picker'),
 
@@ -101,8 +102,8 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
     elements.toyLinkInput.classList.toggle('hidden', !isToySelected);
 
-    // Обводка
-    elements.outlineColorWrap.classList.toggle('hidden', elements.outlineSelect.value !== 'custom');
+    // Обводка (цветная палитра)
+    elements.outlineColorWrap.classList.toggle('hidden', !elements.outlineColored.checked);
 
     // Фон
     const bgVal = elements.bgSelect.value;
@@ -134,9 +135,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const refVal = elements.linkRef.value.trim();
     const artVal = elements.linkArt.value.trim();
 
-    if (colorVal) linksArr.push(`[url=${colorVal}]Окрас[/url]`);
-    if (refVal) linksArr.push(`[url=${refVal}]Референс[/url]`);
-    if (artVal) linksArr.push(`[url=${artVal}]Арт[/url]`);
+    if (colorVal) linksArr.push(`[url=${colorVal}]окрас[/url]`);
+    if (refVal) linksArr.push(`[url=${refVal}]референс[/url]`);
+    if (artVal) linksArr.push(`[url=${artVal}]арт[/url]`);
 
     const finalLinksStr = linksArr.length > 0 ? linksArr.join(', ') : '–';
 
@@ -217,13 +218,15 @@ document.addEventListener('DOMContentLoaded', () => {
       toyVal = extraDetails.length > 0 ? `${baseName} [${extraDetails.join(', ')}]` : baseName;
     }
 
-    // Обводка
-    let outlineVal = '–';
-    if (elements.outlineSelect.value === 'custom') {
-      outlineVal = elements.outlineColorPicker.value;
-    } else {
-      outlineVal = elements.outlineSelect.value;
+    // Обводка (комбинируемая: полупрозрачная / цветная)
+    let outlineParts = [];
+    if (elements.outlineSemi.checked) {
+      outlineParts.push('Полупрозрачная');
     }
+    if (elements.outlineColored.checked) {
+      outlineParts.push(elements.outlineColorPicker.value);
+    }
+    let outlineVal = outlineParts.length > 0 ? outlineParts.join(', ') : '–';
 
     // Фон
     let bgVal = elements.bgSelect.value;
@@ -245,8 +248,8 @@ document.addEventListener('DOMContentLoaded', () => {
       socialVal += ` (${elements.socialLink.value.trim()})`;
     }
 
-    // Сборка Шаблона
-    const bbcode = `[code][b]1.[/b] ${finalLinksStr}
+    // Сборка Шаблона (без [code][/code])
+    const bbcode = `[b]1.[/b] ${finalLinksStr}
 [b]2.[/b] ${elements.charNotes.value.trim() || '–'}
 [b]3.[/b] [header=детали]Детали[/header]
 [block=детали][b]Ресницы:[/b] ${lashVal}
@@ -267,7 +270,7 @@ document.addEventListener('DOMContentLoaded', () => {
 [b]6.[/b] Фон: ${bgVal}
 [b]7.[/b] Время суток: ${elements.timeSelect.value}
 [b]8.[/b] Способ оплаты: ${payVal}
-[b]9.[/b] Готовую работу прислать в: ${socialVal}[/code]`;
+[b]9.[/b] Готовую работу прислать в: ${socialVal}`;
 
     elements.output.value = bbcode;
   }
