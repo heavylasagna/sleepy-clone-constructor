@@ -702,6 +702,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.earsNum.value === 'custom') {
       earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
     } else if (elements.earsNum.value !== '–') {
+      // Получаем только цифру/номер из текста опции для анкеты
       const earDigit = getDigitOnly(elements.earsNum, elements.earsCustom);
       let earAddons = [];
       if (elements.earFurCheck.checked) earAddons.push('шерсть в ушах');
