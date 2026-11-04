@@ -1,1 +1,200 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Заказ Арта / Commission Art Order</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div class="app-container">
+    <header class="app-header">
+      <div class="logo">
+        <span class="logo-icon">🎨</span>
+        <div>
+          <h1>Art Commission Studio</h1>
+          <p>Сконструируйте персонажа и сформируйте заявку</p>
+        </div>
+      </div>
+    </header>
 
+    <main class="app-grid">
+      <!-- 1. Конструктор слоев -->
+      <section class="card builder-card">
+        <h2>1. Визуальный конструктор</h2>
+        <div class="builder-layout">
+          <div class="canvas-wrapper">
+            <svg id="art-canvas" viewBox="0 0 500 500">
+              <rect class="canvas-bg" width="500" height="500" rx="16" />
+              <!-- Слои SVG (управляются через JS) -->
+              <g id="layer-bg"></g>
+              <g id="layer-body"></g>
+              <g id="layer-hair"></g>
+              <g id="layer-clothes"></g>
+              <g id="layer-expression"></g>
+              <g id="layer-effects"></g>
+            </svg>
+            <div class="canvas-hint">Превью вашего выбора</div>
+          </div>
+
+          <div class="controls-wrapper">
+            <div class="control-group">
+              <label>Тип корпуса / Поза (+0 ₽)</label>
+              <div class="options-grid" data-category="body">
+                <button class="opt-btn active" data-value="slim" data-price="0">Стройный</button>
+                <button class="opt-btn" data-value="chibi" data-price="0">Чиби</button>
+                <button class="opt-btn" data-value="heroic" data-price="0">Атлетичный</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Прическа (+200 ₽)</label>
+              <div class="options-grid" data-category="hair">
+                <button class="opt-btn active" data-value="short" data-price="200">Короткие</button>
+                <button class="opt-btn" data-value="long" data-price="200">Длинные</button>
+                <button class="opt-btn" data-value="ponytail" data-price="200">Хвост</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Эмоция / Лицо (+0 ₽)</label>
+              <div class="options-grid" data-category="expression">
+                <button class="opt-btn active" data-value="smile" data-price="0">Улыбка</button>
+                <button class="opt-btn" data-value="wink" data-price="0">Подмигивание</button>
+                <button class="opt-btn" data-value="serious" data-price="0">Серьезный</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Стиль одежды (+300 ₽)</label>
+              <div class="options-grid" data-category="clothes">
+                <button class="opt-btn active" data-value="casual" data-price="300">Кэжуал</button>
+                <button class="opt-btn" data-value="fantasy" data-price="300">Фэнтези</button>
+                <button class="opt-btn" data-value="cyber" data-price="300">Киберпанк</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Атмосфера фона (+400 ₽)</label>
+              <div class="options-grid" data-category="bg">
+                <button class="opt-btn active" data-value="simple" data-price="0">Простой цвет</button>
+                <button class="opt-btn" data-value="nature" data-price="400">Природа</button>
+                <button class="opt-btn" data-value="city" data-price="400">Город / Неон</button>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <label>Спецэффекты (+150 ₽)</label>
+              <div class="options-grid" data-category="effects">
+                <button class="opt-btn active" data-value="none" data-price="0">Без эффектов</button>
+                <button class="opt-btn" data-value="sparkles" data-price="150">Магия / Блестки</button>
+                <button class="opt-btn" data-value="fire" data-price="150">Огонь / Энергия</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Дополнения и Прайс -->
+      <section class="card addons-card">
+        <h2>2. Дополнительные опции</h2>
+        <p class="section-desc">Отметьте необходимые параметры для включения в смету</p>
+        
+        <div class="checkbox-list">
+          <label class="checkbox-item">
+            <input type="checkbox" class="addon-checkbox" data-name="Второй персонаж на арте" data-price="1500">
+            <span class="custom-check"></span>
+            <span class="addon-label">Второй персонаж</span>
+            <span class="addon-price">+1 500 ₽</span>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" class="addon-checkbox" data-name="Детализированный арт-фон" data-price="1000">
+            <span class="custom-check"></span>
+            <span class="addon-label">Сложный детальный фон</span>
+            <span class="addon-price">+1 000 ₽</span>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" class="addon-checkbox" data-name="Срочное выполнение (до 3-х дней)" data-price="800">
+            <span class="custom-check"></span>
+            <span class="addon-label">Срочный заказ (до 3 дней)</span>
+            <span class="addon-price">+800 ₽</span>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" class="addon-checkbox" data-name="Коммерческая лицензия (мерч, коммерция)" data-price="2000">
+            <span class="custom-check"></span>
+            <span class="addon-label">Коммерческие права</span>
+            <span class="addon-price">+2 000 ₽</span>
+          </label>
+
+          <label class="checkbox-item">
+            <input type="checkbox" class="addon-checkbox" data-name="Файл по слоям (PSD / CLIP)" data-price="500">
+            <span class="custom-check"></span>
+            <span class="addon-label">Исходник PSD / CLIP</span>
+            <span class="addon-price">+500 ₽</span>
+          </label>
+        </div>
+
+        <div class="price-summary">
+          <span>Предварительная стоимость:</span>
+          <span id="total-price" class="total-price-val">500 ₽</span>
+        </div>
+      </section>
+
+      <!-- 3. Загрузка референсов -->
+      <section class="card uploads-card">
+        <h2>3. Загрузка референсов</h2>
+        <p class="section-desc">Прикрепите картинки персонажа, примеры одежды или позы</p>
+        
+        <div class="dropzone" id="dropzone">
+          <input type="file" id="file-input" multiple accept="image/*">
+          <div class="dropzone-content">
+            <span class="upload-icon">📁</span>
+            <p>Перетащите файлы сюда или <strong>нажмите для выбора</strong></p>
+            <span class="upload-hint">PNG, JPG, WEBP до 10MB</span>
+          </div>
+        </div>
+
+        <div id="file-preview-grid" class="file-preview-grid"></div>
+      </section>
+
+      <!-- 4. Итоговая анкета -->
+      <section class="card form-card">
+        <h2>4. Анкета заказа</h2>
+        <p class="section-desc">Данные автоматически собраны. Заполните контакт и отредактируйте текст при необходимости.</p>
+
+        <div class="form-inputs">
+          <div class="input-field">
+            <label for="client-contact">Ваш контакт (Telegram / VK / Discord) *</label>
+            <input type="text" id="client-contact" placeholder="@username или ссылка на профиль">
+          </div>
+
+          <div class="input-field">
+            <label for="client-notes">Дополнительные пожелания</label>
+            <textarea id="client-notes" rows="3" placeholder="Укажите цветовую гамму, важные детали, характер персонажа..."></textarea>
+          </div>
+
+          <div class="input-field">
+            <label for="summary-textarea">Итоговый текст анкеты (доступен для правки)</label>
+            <textarea id="summary-textarea" rows="10"></textarea>
+          </div>
+        </div>
+
+        <div class="actions">
+          <button id="btn-copy" class="btn btn-primary">
+            <span class="btn-icon">📋</span> Скопировать анкету
+          </button>
+          <span id="copy-toast" class="toast">Скопировано в буфер!</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
