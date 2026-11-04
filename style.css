@@ -257,25 +257,26 @@ body {
   font-size: 12px;
 }
 
-/* Кастомные кнопки «+» и «−» для количества */
+/* Вынос кнопок плюса и минуса за пределы маленького поля ввода */
 .custom-stepper {
   display: flex;
   align-items: center;
-  border: 1px solid var(--panel-border);
-  border-radius: 6px;
-  background: #fff;
-  overflow: hidden;
+  gap: 4px;
 }
 
 .stepper-btn {
   background: var(--primary-light);
-  border: none;
+  border: 1px solid var(--panel-border);
   color: var(--primary);
   width: 26px;
   height: 26px;
+  border-radius: 6px;
   font-weight: bold;
   cursor: pointer;
   transition: var(--transition);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .stepper-btn:hover {
@@ -285,11 +286,13 @@ body {
 
 .price-qty {
   width: 36px;
-  border: none;
+  height: 26px;
+  border: 1px solid var(--panel-border);
+  border-radius: 6px;
   text-align: center;
   font-family: inherit;
   font-size: 12px;
-  background: transparent;
+  background: #fff;
   outline: none;
 }
 
