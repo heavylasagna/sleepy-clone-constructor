@@ -40,9 +40,9 @@
       <!-- ОСНОВНАЯ СЕКЦИЯ С НАСТРОЙКАМИ И АНКЕТОЙ -->
       <main class="main-content-section">
         
-        <!-- СЕКЦИЯ 1: ВЫБОР ДЕТАЛЕЙ ПЕРСОНАЖА -->
+        <!-- СЕКЦИЯ 1: ДЕТАЛИ КЛОНА -->
         <section class="card builder-card">
-          <h2>1. Детали персонажа</h2>
+          <h2>1. Детали клона</h2>
 
           <div class="form-grid">
 
@@ -246,16 +246,16 @@
           </div>
         </section>
 
-        <!-- СЕКЦИЯ 2: ССЫЛКИ, АНКЕТА И СОЦ. СЕТИ -->
+        <!-- СЕКЦИЯ 2: ОСТАЛЬНОЕ -->
         <section class="card form-card">
-          <h2>2. Данные персонажа и заказа</h2>
+          <h2>2. Остальное</h2>
 
           <div class="input-field">
             <label>1. Ссылки на персонажа:</label>
             <div class="link-inputs">
-              <input type="url" id="link-color" placeholder="Ссылка на Окрас">
-              <input type="url" id="link-ref" placeholder="Ссылка на Референс">
-              <input type="url" id="link-art" placeholder="Ссылка на Арт">
+              <input type="url" id="link-color" placeholder="Ссылка на окрас">
+              <input type="url" id="link-ref" placeholder="Ссылка на референс">
+              <input type="url" id="link-art" placeholder="Ссылка на арт">
             </div>
           </div>
 
@@ -272,14 +272,14 @@
           <div class="grid-2col">
             <div class="input-field">
               <label>5. Обводка:</label>
-              <select id="outline-select" class="styled-select">
-                <option value="–">Нет</option>
-                <option value="Полупрозрачная">Полупрозрачная</option>
-                <option value="custom">Цветная</option>
-              </select>
-              <div id="outline-color-wrap" class="color-picker-wrap hidden" style="margin-top: 8px;">
-                <label>Цвет обводки:</label>
-                <input type="color" id="outline-color-picker" value="#000000">
+              <div class="inline-selects">
+                <label><input type="checkbox" id="outline-semi"> <span>Полупрозрачная</span></label>
+              </div>
+              <div class="inline-selects" style="margin-top: 8px;">
+                <label><input type="checkbox" id="outline-colored"> <span>Цветная</span></label>
+                <div id="outline-color-wrap" class="color-picker-wrap hidden">
+                  <input type="color" id="outline-color-picker" value="#000000">
+                </div>
               </div>
             </div>
 
@@ -337,11 +337,11 @@
           </div>
         </section>
 
-        <!-- СЕКЦИЯ 3: ГОТОВЫЙ BB-КОД -->
+        <!-- СЕКЦИЯ 3: КОД АНКЕТЫ -->
         <section class="card code-card">
           <div class="code-header">
-            <h2>3. Сформированный BB-код</h2>
-            <button id="btn-copy" class="btn-copy">Скопировать BB-код</button>
+            <h2>3. Код анкеты</h2>
+            <button id="btn-copy" class="btn-copy">Скопировать код</button>
           </div>
           <textarea id="bbcode-output" readonly rows="16"></textarea>
           <div id="toast" class="toast">Скопировано в буфер обмена!</div>
