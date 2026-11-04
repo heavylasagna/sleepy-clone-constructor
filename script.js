@@ -70,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     output: document.getElementById('bbcode-output'),
     btnCopy: document.getElementById('btn-copy'),
+    btnReset: document.getElementById('btn-reset'),
     toast: document.getElementById('toast'),
 
     // Слои превью
@@ -92,6 +93,128 @@ document.addEventListener('DOMContentLoaded', () => {
     layerCheeks: document.getElementById('layer-cheeks'),
     layerLight: document.getElementById('layer-light')
   };
+
+  const STORAGE_KEY = 'sleepy_clone_constructor_data';
+
+  // Функция сохранения в localStorage
+  function saveState() {
+    const data = {
+      eyelashes: document.querySelector('input[name="eyelashes"]:checked')?.value || '–',
+      blushSelect: elements.blushSelect.value,
+      blushColor: elements.blushColor.value,
+      blushCustom: elements.blushCustom.value,
+      earsNum: elements.earsNum.value,
+      earFurCheck: elements.earFurCheck.checked,
+      earTuftsCheck: elements.earTuftsCheck.checked,
+      earsCustom: elements.earsCustom.value,
+      cheeksSelect: elements.cheeksSelect.value,
+      cheeksCustom: elements.cheeksCustom.value,
+      tuftSelect: elements.tuftSelect.value,
+      tuftCustom: elements.tuftCustom.value,
+      bangsSelect: elements.bangsSelect.value,
+      maneSelect: elements.maneSelect.value,
+      maneCustom: elements.maneCustom.value,
+      furSelect: elements.furSelect.value,
+      furCustom: elements.furCustom.value,
+      tailSelect: elements.tailSelect.value,
+      tailCustom: elements.tailCustom.value,
+      whiskersSelect: elements.whiskersSelect.value,
+      whiskersColor: elements.whiskersColor.value,
+      whiskersCustom: elements.whiskersCustom.value,
+      clothesSelect: elements.clothesSelect.value,
+      paciCheck: elements.paciCheck.checked,
+      clothesCustom: elements.clothesCustom.value,
+      clothesLinkInput: elements.clothesLinkInput.value,
+      toySelect: elements.toySelect.value,
+      toyCustom: elements.toyCustom.value,
+      toyLinkInput: elements.toyLinkInput.value,
+      linkColor: elements.linkColor.value,
+      linkRef: elements.linkRef.value,
+      linkArt: elements.linkArt.value,
+      charNotes: elements.charNotes.value,
+      addonsText: elements.addonsText.value,
+      outlineSemi: elements.outlineSemi.checked,
+      outlineColored: elements.outlineColored.checked,
+      outlineColorPicker: elements.outlineColorPicker.value,
+      bgSelect: elements.bgSelect.value,
+      bgColorPicker: elements.bgColorPicker.value,
+      bgCustomText: elements.bgCustomText.value,
+      timeSelect: elements.timeSelect.value,
+      paySelect: elements.paySelect.value,
+      payProofLink: elements.payProofLink.value,
+      socialSelect: elements.socialSelect.value,
+      socialLink: elements.socialLink.value
+    };
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  // Функция загрузки из localStorage
+  function loadState() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return;
+    try {
+      const data = JSON.parse(saved);
+      if (data.eyelashes) {
+        elements.eyelashes.forEach(r => {
+          if (r.value === data.eyelashes) r.checked = true;
+        });
+      }
+      if (data.blushSelect) elements.blushSelect.value = data.blushSelect;
+      if (data.blushColor) elements.blushColor.value = data.blushColor;
+      if (data.blushCustom) elements.blushCustom.value = data.blushCustom;
+      if (data.earsNum) elements.earsNum.value = data.earsNum;
+      if (data.earFurCheck !== undefined) elements.earFurCheck.checked = data.earFurCheck;
+      if (data.earTuftsCheck !== undefined) elements.earTuftsCheck.checked = data.earTuftsCheck;
+      if (data.earsCustom) elements.earsCustom.value = data.earsCustom;
+      if (data.cheeksSelect) elements.cheeksSelect.value = data.cheeksSelect;
+      if (data.cheeksCustom) elements.cheeksCustom.value = data.cheeksCustom;
+      if (data.tuftSelect) elements.tuftSelect.value = data.tuftSelect;
+      if (data.tuftCustom) elements.tuftCustom.value = data.tuftCustom;
+      if (data.bangsSelect) elements.bangsSelect.value = data.bangsSelect;
+      if (data.maneSelect) elements.maneSelect.value = data.maneSelect;
+      if (data.maneCustom) elements.maneCustom.value = data.maneCustom;
+      if (data.furSelect) elements.furSelect.value = data.furSelect;
+      if (data.furCustom) elements.furCustom.value = data.furCustom;
+      if (data.tailSelect) elements.tailSelect.value = data.tailSelect;
+      if (data.tailCustom) elements.tailCustom.value = data.tailCustom;
+      if (data.whiskersSelect) elements.whiskersSelect.value = data.whiskersSelect;
+      if (data.whiskersColor) elements.whiskersColor.value = data.whiskersColor;
+      if (data.whiskersCustom) elements.whiskersCustom.value = data.whiskersCustom;
+      if (data.clothesSelect) elements.clothesSelect.value = data.clothesSelect;
+      if (data.paciCheck !== undefined) elements.paciCheck.checked = data.paciCheck;
+      if (data.clothesCustom) elements.clothesCustom.value = data.clothesCustom;
+      if (data.clothesLinkInput) elements.clothesLinkInput.value = data.clothesLinkInput;
+      if (data.toySelect) elements.toySelect.value = data.toySelect;
+      if (data.toyCustom) elements.toyCustom.value = data.toyCustom;
+      if (data.toyLinkInput) elements.toyLinkInput.value = data.toyLinkInput;
+      if (data.linkColor) elements.linkColor.value = data.linkColor;
+      if (data.linkRef) elements.linkRef.value = data.linkRef;
+      if (data.linkArt) elements.linkArt.value = data.linkArt;
+      if (data.charNotes) elements.charNotes.value = data.charNotes;
+      if (data.addonsText) elements.addonsText.value = data.addonsText;
+      if (data.outlineSemi !== undefined) elements.outlineSemi.checked = data.outlineSemi;
+      if (data.outlineColored !== undefined) elements.outlineColored.checked = data.outlineColored;
+      if (data.outlineColorPicker) elements.outlineColorPicker.value = data.outlineColorPicker;
+      if (data.bgSelect) elements.bgSelect.value = data.bgSelect;
+      if (data.bgColorPicker) elements.bgColorPicker.value = data.bgColorPicker;
+      if (data.bgCustomText) elements.bgCustomText.value = data.bgCustomText;
+      if (data.timeSelect) elements.timeSelect.value = data.timeSelect;
+      if (data.paySelect) elements.paySelect.value = data.paySelect;
+      if (data.payProofLink) elements.payProofLink.value = data.payProofLink;
+      if (data.socialSelect) elements.socialSelect.value = data.socialSelect;
+      if (data.socialLink) elements.socialLink.value = data.socialLink;
+    } catch (e) {
+      console.error('Ошибка загрузки сохраненных данных', e);
+    }
+  }
+
+  // Сброс настроек
+  elements.btnReset.addEventListener('click', () => {
+    if (confirm('Сбросить все настройки конструктора?')) {
+      localStorage.removeItem(STORAGE_KEY);
+      location.reload();
+    }
+  });
 
   function updateVisibility() {
     const isBlushCustom = elements.blushSelect.value === 'custom';
@@ -125,9 +248,9 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.furSelect.value = '–';
     }
 
-    const isClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
-    elements.clothesCustom.classList.toggle('hidden', !isClothesSelected);
-    elements.clothesLinkInput.classList.toggle('hidden', !isClothesSelected);
+    const isльникClothesSelected = clothesVal !== '–' || elements.paciCheck.checked;
+    elements.clothesCustom.classList.toggle('hidden', !isльникClothesSelected);
+    elements.clothesLinkInput.classList.toggle('hidden', !isльникClothesSelected);
 
     const isToySelected = elements.toySelect.value !== '–';
     elements.toyCustom.classList.toggle('hidden', !isToySelected);
@@ -295,11 +418,13 @@ document.addEventListener('DOMContentLoaded', () => {
       updateVisibility();
       updatePreviewLayers();
       generateBBCode();
+      saveState();
     });
     item.addEventListener('change', () => {
       updateVisibility();
       updatePreviewLayers();
       generateBBCode();
+      saveState();
     });
   });
 
@@ -318,7 +443,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let lashVal = '–';
     elements.eyelashes.forEach(r => { if (r.checked) lashVal = r.value; });
 
-    // Функция для получения только цифры/номера для BB-кода анкеты
     const getDigitOnly = (selectEl, customEl) => {
       if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
       if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
@@ -488,6 +612,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  // Инициализация при загрузке
+  loadState();
   updateVisibility();
   updatePreviewLayers();
   generateBBCode();
