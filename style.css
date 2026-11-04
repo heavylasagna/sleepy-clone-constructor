@@ -27,7 +27,7 @@ body {
 }
 
 .app-container {
-  max-width: 1100px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -48,6 +48,33 @@ body {
   font-size: 1rem;
 }
 
+/* ДВУХКОЛОНОЧНЫЙ МАКЕТ С ЛИПКИМ САЙДБАРОМ */
+.constructor-workspace {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .constructor-workspace {
+    grid-template-columns: 360px 1fr;
+    align-items: start;
+  }
+}
+
+.sticky-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+@media (min-width: 900px) {
+  .sticky-sidebar {
+    position: sticky;
+    top: 20px;
+  }
+}
+
 .card {
   background: var(--panel-bg);
   border: 2px solid var(--panel-border);
@@ -57,17 +84,21 @@ body {
   box-shadow: var(--shadow);
 }
 
+.sticky-sidebar .card {
+  margin-bottom: 0;
+}
+
 .card h2 {
   font-family: 'Comfortaa', cursive;
-  font-size: 1.3rem;
+  font-size: 1.25rem;
   color: var(--primary);
   margin-bottom: 16px;
 }
 
-/* Превью сверху */
+/* Превью */
 .art-preview-box {
   width: 100%;
-  max-height: 420px;
+  max-height: 380px;
   overflow: hidden;
   border-radius: 12px;
   border: 1px dashed var(--primary);
@@ -83,19 +114,23 @@ body {
   object-fit: contain;
 }
 
-/* Сетка */
-.main-layout {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 24px;
+/* Расценки */
+.pricing-content {
+  background: #f8fafc;
+  border: 1px dashed var(--panel-border);
+  border-radius: 12px;
+  padding: 16px;
+  min-height: 80px;
 }
 
-@media (min-width: 900px) {
-  .main-layout {
-    grid-template-columns: 1fr 1fr;
-  }
+.pricing-empty {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  font-style: italic;
+  text-align: center;
 }
 
+/* Формы */
 .form-grid {
   display: flex;
   flex-direction: column;
@@ -119,7 +154,7 @@ body {
 
 .radio-buttons {
   display: flex;
-  gap: 16px;
+  gap: 20px;
 }
 
 .radio-buttons label {
@@ -157,15 +192,15 @@ body {
 .color-picker-wrap {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 8px;
   font-size: 0.85rem;
   color: var(--text-muted);
 }
 
 input[type="color"] {
   border: none;
-  width: 32px;
-  height: 32px;
+  width: 34px;
+  height: 34px;
   border-radius: 50%;
   cursor: pointer;
   background: none;
@@ -179,32 +214,6 @@ input[type="color"] {
   display: none !important;
 }
 
-.file-attach-wrap {
-  margin-top: 10px;
-  font-size: 0.85rem;
-  color: var(--text-muted);
-}
-
-.file-attach-wrap input {
-  margin-top: 4px;
-}
-
-.thumb-preview img, .preview-grid img {
-  width: 60px;
-  height: 60px;
-  object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid var(--panel-border);
-  margin-top: 6px;
-}
-
-.preview-grid {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-/* Поля второй секции */
 .input-field {
   margin-bottom: 16px;
 }
