@@ -18,21 +18,36 @@
   padding: 0;
 }
 
+/* Адаптивный сброс высоты для мобильных устройств */
 body {
   font-family: 'Nunito', sans-serif;
   background-color: var(--bg-main);
   color: var(--text-dark);
-  padding: 16px;
-  height: 100vh;
-  overflow: hidden;
+  padding: 12px;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+@media (min-width: 900px) {
+  body {
+    height: 100vh;
+    overflow: hidden;
+    padding: 16px;
+  }
 }
 
 .app-container {
   max-width: 1350px;
-  height: 100%;
+  width: 100%;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+}
+
+@media (min-width: 900px) {
+  .app-container {
+    height: 100%;
+  }
 }
 
 .app-header {
@@ -43,14 +58,26 @@ body {
 
 .app-header h1 {
   font-family: 'Comfortaa', cursive;
-  font-size: 1.6rem;
+  font-size: 1.4rem;
   color: var(--primary);
   margin-bottom: 2px;
 }
 
+@media (min-width: 600px) {
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
+}
+
 .app-header p {
   color: var(--text-muted);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
+}
+
+@media (min-width: 600px) {
+  .app-header p {
+    font-size: 0.85rem;
+  }
 }
 
 .constructor-workspace {
@@ -113,24 +140,35 @@ body {
   background: var(--panel-bg);
   border: 2px solid var(--panel-border);
   border-radius: var(--radius);
-  padding: 16px;
+  padding: 12px;
   margin-bottom: 16px;
   box-shadow: var(--shadow);
 }
 
+@media (min-width: 600px) {
+  .card {
+    padding: 16px;
+  }
+}
+
 .card h2 {
   font-family: 'Comfortaa', cursive;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   color: var(--primary);
   margin-bottom: 10px;
 }
 
-/* Точная подгонка блока превью под картинку */
+@media (min-width: 600px) {
+  .card h2 {
+    font-size: 1.1rem;
+  }
+}
+
+/* Точная подгонка блока превью под картинку с адаптивностью для мобильных */
 .art-preview-box {
   position: relative;
-  width: 500px;
-  height: 520px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 500px;
   aspect-ratio: 500 / 520;
   overflow: hidden;
   border-radius: 12px;
@@ -203,6 +241,7 @@ body {
 .pricing-item input[type="checkbox"] {
   margin-top: 2px;
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .pricing-main-label {
@@ -277,6 +316,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .stepper-btn:hover {
@@ -336,10 +376,18 @@ body {
   display: flex;
   gap: 6px;
   align-items: center;
+  flex-wrap: wrap;
+}
+
+@media (min-width: 480px) {
+  .link-row {
+    flex-wrap: nowrap;
+  }
 }
 
 .link-row input[type="url"] {
   flex: 1;
+  min-width: 140px;
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
@@ -349,7 +397,13 @@ body {
   padding: 6px 10px;
   border: 1px solid #ccc;
   border-radius: 6px;
-  width: 90px;
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .link-row input[type="text"] {
+    width: 90px;
+  }
 }
 
 .btn-remove-link {
@@ -364,6 +418,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .form-grid {
@@ -390,6 +445,7 @@ body {
 .radio-buttons {
   display: flex;
   gap: 20px;
+  flex-wrap: wrap;
 }
 
 .radio-buttons label {
@@ -440,6 +496,7 @@ input[type="color"] {
   border-radius: 50%;
   cursor: pointer;
   background: none;
+  flex-shrink: 0;
 }
 
 .custom-input {
@@ -485,6 +542,8 @@ input[type="color"] {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 8px;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 
 .btn-copy {
@@ -497,6 +556,13 @@ input[type="color"] {
   cursor: pointer;
   font-size: 0.9rem;
   transition: var(--transition);
+  width: 100%;
+}
+
+@media (min-width: 480px) {
+  .btn-copy {
+    width: auto;
+  }
 }
 
 .btn-copy:hover {
@@ -525,6 +591,7 @@ input[type="color"] {
   opacity: 0;
   transition: opacity 0.3s ease;
   pointer-events: none;
+  z-index: 1000;
 }
 
 .toast.show {
