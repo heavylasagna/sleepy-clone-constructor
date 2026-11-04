@@ -488,13 +488,39 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerMane.style.display = 'none';
     }
 
-    const tuftVal = elements.tuftSelect.value;
+    // Обработка ушей и кисточек/шерсти в ушах
     const earVal = elements.earsNum.value;
+    let earIndex = '1';
+    if (earVal !== '–' && earVal !== 'custom') {
+      elements.layerEars.src = `images/${earVal}`;
+      elements.layerEars.style.display = 'block';
 
+      const earNumMatch = earVal.match(/\d+/);
+      earIndex = earNumMatch ? earNumMatch[0] : '1';
+
+      if (elements.earFurCheck.checked) {
+        elements.layerEarfur.src = `images/earfur${earIndex}.png`;
+        elements.layerEarfur.style.display = 'block';
+      } else {
+        elements.layerEarfur.style.display = 'none';
+      }
+
+      if (elements.earTuftsCheck.checked) {
+        elements.layerEartufts.src = `images/eartufts${earIndex}.png`;
+        elements.layerEartufts.style.display = 'block';
+      } else {
+        elements.layerEartufts.style.display = 'none';
+      }
+    } else {
+      elements.layerEars.style.display = 'none';
+      elements.layerEarfur.style.display = 'none';
+      elements.layerEartufts.style.display = 'none';
+    }
+
+    // Обработка хохолков с учетом выбранных ушей
+    const tuftVal = elements.tuftSelect.value;
     if (tuftVal !== '–' && tuftVal !== 'custom') {
       let currentTuftFile = tuftVal;
-      const earNumMatch = earVal.match(/\d+/);
-      const earIndex = earNumMatch ? earNumMatch[0] : null;
 
       if (earIndex === '1') {
         if (tuftVal === 'tuft3.png') currentTuftFile = 'tuft3-1.png';
@@ -535,33 +561,6 @@ document.addEventListener('DOMContentLoaded', () => {
       elements.layerFringe.style.display = 'block';
     } else {
       elements.layerFringe.style.display = 'none';
-    }
-
-    let earIndex = '1';
-    if (earVal !== '–' && earVal !== 'custom') {
-      elements.layerEars.src = `images/${earVal}`;
-      elements.layerEars.style.display = 'block';
-
-      const earNumMatch = earVal.match(/\d+/);
-      earIndex = earNumMatch ? earNumMatch[0] : '1';
-
-      if (elements.earFurCheck.checked) {
-        elements.layerEarfur.src = `images/earfur${earIndex}.png`;
-        elements.layerEarfur.style.display = 'block';
-      } else {
-        elements.layerEarfur.style.display = 'none';
-      }
-
-      if (elements.earTuftsCheck.checked) {
-        elements.layerEartufts.src = `images/eartufts${earIndex}.png`;
-        elements.layerEartufts.style.display = 'block';
-      } else {
-        elements.layerEartufts.style.display = 'none';
-      }
-    } else {
-      elements.layerEars.style.display = 'none';
-      elements.layerEarfur.style.display = 'none';
-      elements.layerEartufts.style.display = 'none';
     }
 
     if (elements.furBodyCheck.checked && elements.optBodyfurWrap.style.display !== 'none') {
