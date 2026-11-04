@@ -66,7 +66,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     output: document.getElementById('bbcode-output'),
     btnCopy: document.getElementById('btn-copy'),
-    toast: document.getElementById('toast')
+    toast: document.getElementById('toast'),
+
+    // Слои превью
+    layerBg: document.getElementById('layer-bg'),
+    layerBase: document.getElementById('layer-base'),
+    layerEars: document.getElementById('layer-ears'),
+    layerEartufts: document.getElementById('layer-eartufts'),
+    layerCheeks: document.getElementById('layer-cheeks'),
+    layerTuft: document.getElementById('layer-tuft'),
+    layerFringe: document.getElementById('layer-fringe'),
+    layerMane: document.getElementById('layer-mane'),
+    layerFur: document.getElementById('layer-fur'),
+    layerTail: document.getElementById('layer-tail'),
+    layerWhiskers: document.getElementById('layer-whiskers'),
+    layerBlush: document.getElementById('layer-blush'),
+    layerClothes: document.getElementById('layer-clothes'),
+    layerToy: document.getElementById('layer-toy'),
+    layerLight: document.getElementById('layer-light')
   };
 
   function updateVisibility() {
@@ -106,13 +123,155 @@ document.addEventListener('DOMContentLoaded', () => {
     elements.socialLink.classList.toggle('hidden', isLSPos);
   }
 
+  // Обновление картинок на превью с учетом base.png и остальных слоев
+  function updatePreviewLayers() {
+    elements.layerBg.src = "images/background.png";
+    elements.layerBg.style.display = 'block';
+
+    elements.layerBase.src = "images/base.png";
+    elements.layerBase.style.display = 'block';
+
+    // Уши
+    const earVal = elements.earsNum.value;
+    if (earVal !== '–' && earVal !== 'custom') {
+      elements.layerEars.src = `images/${earVal}`;
+      elements.layerEars.style.display = 'block';
+
+      const earNumMatch = earVal.match(/\d+/);
+      const earIndex = earNumMatch ? earNumMatch[0] : '1';
+      const earType = elements.earsType.value;
+
+      if (earType === 'С кисточками') {
+        elements.layerEartufts.src = `images/eartufts${earIndex}.png`;
+        elements.layerEartufts.style.display = 'block';
+      } else {
+        elements.layerEartufts.style.display = 'none';
+      }
+
+      if (earType === 'С шерстью') {
+        elements.layerEartufts.src = `images/earfur${earIndex}.png`;
+        elements.layerEartufts.style.display = 'block';
+      }
+    } else {
+      elements.layerEars.style.display = 'none';
+      elements.layerEartufts.style.display = 'none';
+    }
+
+    // Щёки
+    const cheeksVal = elements.cheeksSelect.value;
+    if (cheeksVal !== '–' && cheeksVal !== 'custom') {
+      elements.layerCheeks.src = `images/${cheeksVal}`;
+      elements.layerCheeks.style.display = 'block';
+    } else {
+      elements.layerCheeks.style.display = 'none';
+    }
+
+    // Хохолок
+    const tuftVal = elements.tuftSelect.value;
+    if (tuftVal !== '–' && tuftVal !== 'custom') {
+      elements.layerTuft.src = `images/${tuftVal}`;
+      elements.layerTuft.style.display = 'block';
+    } else {
+      elements.layerTuft.style.display = 'none';
+    }
+
+    // Чёлка
+    const bangsVal = elements.bangsSelect.value;
+    if (bangsVal !== '–') {
+      elements.layerFringe.src = `images/${bangsVal}`;
+      elements.layerFringe.style.display = 'block';
+    } else {
+      elements.layerFringe.style.display = 'none';
+    }
+
+    // Грива
+    const maneVal = elements.maneSelect.value;
+    if (maneVal !== '–' && maneVal !== 'custom') {
+      elements.layerMane.src = `images/${maneVal}`;
+      elements.layerMane.style.display = 'block';
+    } else {
+      elements.layerMane.style.display = 'none';
+    }
+
+    // Шерсть
+    const furVal = elements.furSelect.value;
+    if (furVal === 'earfur') {
+      const earVal = elements.earsNum.value;
+      const earNumMatch = earVal.match(/\d+/);
+      const earIndex = earNumMatch ? earNumMatch[0] : '1';
+      elements.layerFur.src = `images/furear${earIndex}.png`;
+      elements.layerFur.style.display = 'block';
+    } else if (furVal !== '–' && furVal !== 'custom') {
+      elements.layerFur.src = `images/${furVal}`;
+      elements.layerFur.style.display = 'block';
+    } else {
+      elements.layerFur.style.display = 'none';
+    }
+
+    // Хвост
+    const tailVal = elements.tailSelect.value;
+    if (tailVal !== '–' && tailVal !== 'custom') {
+      elements.layerTail.src = `images/${tailVal}`;
+      elements.layerTail.style.display = 'block';
+    } else {
+      elements.layerTail.style.display = 'none';
+    }
+
+    // Усы
+    const whiskersVal = elements.whiskersSelect.value;
+    if (whiskersVal !== '–' && whiskersVal !== 'custom') {
+      elements.layerWhiskers.src = `images/${whiskersVal}`;
+      elements.layerWhiskers.style.display = 'block';
+    } else {
+      elements.layerWhiskers.style.display = 'none';
+    }
+
+    // Румянец
+    const blushVal = elements.blushSelect.value;
+    if (blushVal !== '–' && blushVal !== 'custom') {
+      elements.layerBlush.src = `images/${blushVal}`;
+      elements.layerBlush.style.display = 'block';
+    } else {
+      elements.layerBlush.style.display = 'none';
+    }
+
+    // Одежда
+    const clothesVal = elements.clothesSelect.value;
+    if (clothesVal !== '–' && clothesVal !== 'custom') {
+      elements.layerClothes.src = `images/${clothesVal}`;
+      elements.layerClothes.style.display = 'block';
+    } else {
+      elements.layerClothes.style.display = 'none';
+    }
+
+    // Игрушка
+    const toyVal = elements.toySelect.value;
+    if (toyVal !== '–' && toyVal !== 'custom') {
+      elements.layerToy.src = `images/${toyVal}`;
+      elements.layerToy.style.display = 'block';
+    } else {
+      elements.layerToy.style.display = 'none';
+    }
+
+    // Освещение
+    const timeVal = elements.timeSelect.value;
+    if (timeVal !== '–') {
+      elements.layerLight.src = `images/${timeVal}`;
+      elements.layerLight.style.display = 'block';
+    } else {
+      elements.layerLight.style.display = 'none';
+    }
+  }
+
   document.querySelectorAll('input, select, textarea').forEach(item => {
     item.addEventListener('input', () => {
       updateVisibility();
+      updatePreviewLayers();
       generateBBCode();
     });
     item.addEventListener('change', () => {
       updateVisibility();
+      updatePreviewLayers();
       generateBBCode();
     });
   });
@@ -136,40 +295,55 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.blushSelect.value === 'custom') {
       blushVal = elements.blushCustom.value.trim() || 'Свой вариант';
     } else if (elements.blushSelect.value !== '–') {
-      blushVal = `${elements.blushSelect.value} [${elements.blushColor.value}]`;
+      const blushName = elements.blushSelect.options[elements.blushSelect.selectedIndex].text;
+      blushVal = `${blushName} [${elements.blushColor.value}]`;
     }
 
     let earsVal = '–';
     if (elements.earsNum.value === 'custom') {
       earsVal = elements.earsCustom.value.trim() || 'Свой вариант';
     } else if (elements.earsNum.value !== '–') {
-      earsVal = `${elements.earsNum.value} [${elements.earsType.value}]`;
+      const earName = elements.earsNum.options[elements.earsNum.selectedIndex].text;
+      earsVal = `${earName} [${elements.earsType.value}]`;
     }
 
     const getSimpleVal = (selectEl, customEl) => {
       if (selectEl.value === 'custom') return customEl.value.trim() || 'Свой вариант';
+      if (selectEl.value !== '–' && selectEl.selectedIndex >= 0) {
+        return selectEl.options[selectEl.selectedIndex].text;
+      }
       return selectEl.value;
     };
 
     const cheeksVal = getSimpleVal(elements.cheeksSelect, elements.cheeksCustom);
     const tuftVal = getSimpleVal(elements.tuftSelect, elements.tuftCustom);
-    const bangsVal = elements.bangsSelect.value;
+    const bangsVal = elements.bangsSelect.value !== '–' ? elements.bangsSelect.options[elements.bangsSelect.selectedIndex].text : '–';
     const maneVal = getSimpleVal(elements.maneSelect, elements.maneCustom);
-    const furVal = getSimpleVal(elements.furSelect, elements.furCustom);
+    
+    let furVal = '–';
+    if (elements.furSelect.value === 'custom') {
+      furVal = elements.furCustom.value.trim() || 'Свой вариант';
+    } else if (elements.furSelect.value === 'earfur') {
+      furVal = 'На ушах';
+    } else if (elements.furSelect.value !== '–') {
+      furVal = elements.furSelect.options[elements.furSelect.selectedIndex].text;
+    }
+
     const tailVal = getSimpleVal(elements.tailSelect, elements.tailCustom);
 
     let whiskersVal = '–';
     if (elements.whiskersSelect.value === 'custom') {
       whiskersVal = elements.whiskersCustom.value.trim() || 'Свой вариант';
     } else if (elements.whiskersSelect.value !== '–') {
-      whiskersVal = `${elements.whiskersSelect.value} [${elements.whiskersColor.value}]`;
+      const whiskName = elements.whiskersSelect.options[elements.whiskersSelect.selectedIndex].text;
+      whiskersVal = `${whiskName} [${elements.whiskersColor.value}]`;
     }
 
     let clothesVal = '–';
     if (elements.clothesSelect.value !== '–') {
       const baseName = elements.clothesSelect.value === 'custom' 
         ? (elements.clothesCustom.value.trim() || 'Свой вариант')
-        : elements.clothesSelect.value;
+        : elements.clothesSelect.options[elements.clothesSelect.selectedIndex].text;
 
       let extraDetails = [];
       if (elements.clothesSelect.value !== 'custom' && elements.clothesCustom.value.trim()) {
@@ -186,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (elements.toySelect.value !== '–') {
       const baseName = elements.toySelect.value === 'custom'
         ? (elements.toyCustom.value.trim() || 'Свой вариант')
-        : elements.toySelect.value;
+        : elements.toySelect.options[elements.toySelect.selectedIndex].text;
 
       let extraDetails = [];
       if (elements.toySelect.value !== 'custom' && elements.toyCustom.value.trim()) {
@@ -214,6 +388,8 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if ((bgVal === 'Другие цвета' || bgVal === 'Другие элементы на фоне') && elements.bgCustomText.value.trim()) {
       bgVal = `${bgVal} [${elements.bgCustomText.value.trim()}]`;
     }
+
+    const timeVal = elements.timeSelect.value !== '–' ? elements.timeSelect.options[elements.timeSelect.selectedIndex].text : '–';
 
     let payVal = elements.paySelect.value;
     if (elements.payProofLink.value.trim()) {
@@ -244,7 +420,7 @@ document.addEventListener('DOMContentLoaded', () => {
 [b]4.[/b] ${elements.addonsText.value.trim() || '–'}
 [b]5.[/b] Обводка: ${outlineVal}
 [b]6.[/b] Фон: ${bgVal}
-[b]7.[/b] Время суток: ${elements.timeSelect.value}
+[b]7.[/b] Время суток: ${timeVal}
 [b]8.[/b] Способ оплаты: ${payVal}
 [b]9.[/b] Готовую работу прислать в: ${socialVal}`;
 
@@ -260,5 +436,6 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   updateVisibility();
+  updatePreviewLayers();
   generateBBCode();
 });
