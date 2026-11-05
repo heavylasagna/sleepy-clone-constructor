@@ -181,7 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function calculateTotal() {
     let totalKrol = 1200;
-    let totalRub = 400;
+    let totalRub = 300;
 
     document.querySelectorAll('.pricing-item').forEach(item => {
       const checkbox = item.querySelector('.price-check');
